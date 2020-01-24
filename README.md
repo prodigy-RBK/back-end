@@ -10,7 +10,6 @@
   </p>
 </p>
 
-
 ## Table of contents
 
 - [Quick start](#quick-start)
@@ -22,26 +21,29 @@
 - [Thanks](#thanks)
 - [Copyright and license](#copyright-and-license)
 
-
 ## Quick start
 
 ### Installation Guidelines
+
 ### Prerequisites
 
 If you don’t have any of these tools installed already, you will need to:
+
 ```
  Download and install git
  Download and install nodejs https://nodejs.org
 ```
 
-
 ### Get Started
+
 You will need to clone source code of client GitHub repository. To do this open console and execute following lines:
 
 ```shell
 git clone https://github.com/prodigy-RBK/back-end.git
 ```
+
 ### Installing Node Modules
+
 You will need to clone source code of client GitHub repository. To do this open console and execute following lines:
 
 ```
@@ -50,17 +52,18 @@ You will need to clone source code of client GitHub repository. To do this open 
 ```
 
 ### Running local copy
+
 To run local copy in development mode, execute:
+
 ```
  npm start
 ```
-your http://localhost:3000 will be running for API calls
 
+your http://localhost:3000 will be running for API calls
 
 ## Status
 
 Flow is in development process
-
 
 ## What's included
 
@@ -74,7 +77,7 @@ Here is the folder structure
 ├───operations
 |
 ├───api
-│   
+│
 ├───services
 |
 ├───loaders
@@ -87,6 +90,7 @@ Have a bug or a feature request? Please first read the [issues]() and search for
 ## Contributing
 
 In order to contribute with a feature or User Story in the project you need to create a new branch with your name and the feature name e.g:
+
 ```text
 branch name : your-name-feature-name
 ```
@@ -96,7 +100,6 @@ Please read through our [Endpoint guidelines](). Included are directions for mak
 Please Read our coding style and contribution [guidelines]().
 
 Moreover, all Javascript should conform to the [Code Guide](), maintained by [standard](https://github.com/standard/standard).
-
 
 ## Thanks
 
