@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "cors": "^2.8.5",
+    "faker": "^4.1.0",
     "nodemon": "^2.0.2"
   }
 }
