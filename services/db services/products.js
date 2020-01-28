@@ -29,7 +29,7 @@ const updateRatings = (id, rating) => {
   return Product.findOneAndUpdate(
     { _id: id },
     { rating, $inc: { opinions: 1 } },
-    { useFindAndModify: false }
+    { useFindAndModify: false, new: true }
   );
 };
 

@@ -37,7 +37,7 @@ const productSchema = mongoose.Schema({
     ]
     // default: ["https://gear.nitro.com/content/images/thumbs/default-image_600.png"]
   },
-  avalability: {
+  availability: {
     type: [
       {
         size: String,
