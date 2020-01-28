@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+require('../loaders/mongoose')
 const userSchema = mongoose.Schema({
   firstName: {
     required: true,

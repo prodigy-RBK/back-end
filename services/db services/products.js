@@ -17,6 +17,7 @@ const deleteProduct = id => {
   return Product.findOneAndRemove({ _id: id }, { useFindAndModify: false });
 };
 
+//not needed anymore
 const increaseOpinions = id => {
   return Product.findOneAndUpdate(
     { _id: id },

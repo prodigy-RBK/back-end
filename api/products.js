@@ -20,14 +20,22 @@ router.get("/gender/:id", async (req, res) => {
   }
 });
 
+router.post("/product", async (req, res) => {
+  try {
+    let product = await productsService.addProduct(req.body);
+    res.status(201).send(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.put("/:id/rating", async (req, res) => {
   try {
     let product = await productsOperation.updateRating(
       req.params.id,
       req.body.rating
     );
-    console.log(req.params.id);
-    res.status(200).send(product);
+    res.status(204).send(product);
   } catch (err) {
     res.status(500).json(err);
   }
