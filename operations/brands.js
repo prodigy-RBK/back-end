@@ -1,20 +1,21 @@
-const user = require("../services/db services/users")
+const brand = require("../services/db services/brands")
 const rsponseModel = require("./responseModel")
-
 const bcrypt = require("bcryptjs");
-
 const { createTokens } = require("../middleware/token")
+
 require('../loaders/mongoose')
 
 
+//****we need to decide if brand can do signup or only the admin can add new barnd   */
 var signUp = async request => {
-    //console.log('request===>', request)
-    return user.createUser(request.body)//request ==> {user details}
-        .then(async newUser => {
+    console.log('request===>', request.body)
+    return brand.createBrand(request.body)//request ==> {Brand details}
+        .then(async newBrand => {
             //const expire = "20m";
-            //const token = jwt.sign({ newUser }, secretKey, { expiresIn: expire });
-            var tokens = await createTokens(newUser)//tokens is an array of tokens
-            const details = new rsponseModel.Details(newUser.email, { token: tokens[0], refreshToken: tokens[1] });
+            //const token = jwt.sign({ newBrand }, secretKey, { expiresIn: expire });
+            console.log('newBrand===>', newBrand)
+            var tokens = await createTokens(newBrand)//tokens is an array of tokens
+            const details = new rsponseModel.Details(newBrand.email, { token: tokens[0], refreshToken: tokens[1] });
             return new rsponseModel.AuthResponse("success", details);
         })
         .catch(err => {
@@ -24,17 +25,16 @@ var signUp = async request => {
             return serverErrorResponse;
         });
 };
-
+/*************************************************************************** */
 const signIn = async request => {
     // return object if existing user , false if psw or username are wrong
-    return user.findUser(request.body.email).then(async loginUser => {
-        if (loginUser) {
+    return brand.findBrand(request.body.email).then(async loginBrand => {
+        if (loginBrand) {
             // if user a teacher
-            let psw = await bcrypt.compare(request.body.password, loginUser.password);
-
+            let psw = await bcrypt.compare(request.body.password, loginBrand.password);
             if (psw) {
-                var tokens = await createTokens(loginUser)//tokens is an array of tokens
-                const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] });
+                var tokens = await createTokens(loginBrand)//tokens is an array of tokens
+                const details = new rsponseModel.Details(loginBrand.email, { token: tokens[0], refreshToken: tokens[1] });
                 return new rsponseModel.AuthResponse("success", details);
             }//else: ifpsw===false
             return wrongEntryPssword;
