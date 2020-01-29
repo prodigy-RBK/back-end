@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const userOperations = require('../operations/users')
+const brandOperations = require('../operations/brands')
+
 router.post("/signUp", (req, res) => {
-    userOperations.signUp(req)
+    brandOperations.signUp(req)
         .then(response => {
-            //console.log(user)
+            console.log(response)
             res.send(response)
         })
 });
 
-router.post("/login", (req, res) => {
-    userOperations.signIn(req)
+router.post("/signIn", (req, res) => {
+    brandOperations.signIn(req)
         .then(response => {
             console.log(response)
             res.send(response)

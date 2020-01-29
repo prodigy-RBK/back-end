@@ -16,9 +16,9 @@ const user = require("../services/db services/users")
 // };
 
 let createTokens = async (user) => {
-  const createToken = jwt.sign({ user }, secretKey, { expiresIn: '30m' });
+  const createToken = jwt.sign({ user }, secretKey, { expiresIn: '1m' });
 
-  const createRefreshToken = jwt.sign({ user }, secretKey2 + user.password, { expiresIn: '7d' });
+  const createRefreshToken = jwt.sign({ user }, secretKey2 + user.password, { expiresIn: '2m' });
 
   return Promise.all([createToken, createRefreshToken]);
 };
@@ -35,19 +35,22 @@ let refreshTokens = async (req, res, next) => {
       req.user = user;
       next();
     } catch (err) {
+
       try {
-        const { user: { id } } = jwt.decode(refreshToken);
-        userId = id;
+        const { user: { _id } } = jwt.decode(refreshToken);
+        userId = _id;
       } catch (err) {
-        return res.status(401).send(invalidToken);
+        res.status(401).send(invalidToken);
+        return
       }
 
       if (!userId) {
-        return res.status(401).send(invalidToken);
+        res.status(401).send(invalidToken);
       }
       const findUser = await user.findUserById(userId)
       if (!findUser) {
-        return res.status(401).send(invalidToken);
+        res.status(401).send(invalidToken);
+        return
       }
 
       const refreshSecret = secretKey2 + findUser.password;
@@ -55,15 +58,17 @@ let refreshTokens = async (req, res, next) => {
       try {
         jwt.verify(refreshToken, refreshSecret);
       } catch (err) {
-        return res.status(401).send(invalidToken);
+        res.status(401).send(invalidToken);
+        return
       }
 
       const [newToken, newRefreshToken] = await createTokens(findUser);
-      return {
+      //console.log('newwwww===>', newToken, '\n', newRefreshToken)
+      req.tokens = {
         token: newToken,
-        refreshToken: newRefreshToken,
-        user,
+        refreshToken: newRefreshToken
       };
+      next();
 
     }
   }
