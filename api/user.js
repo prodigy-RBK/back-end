@@ -8,19 +8,12 @@ router.post("/signUp", (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-router.post("/signIn", (req, res) => {
-  userOperations.signIn(req).then(response => {
-    res.send(response);
-  });
-=======
 router.post("/login", (req, res) => {
     userOperations.signIn(req)
         .then(response => {
             console.log(response)
             res.send(response)
         })
->>>>>>> 3655431413ebaf55f173caa091f8c065d99280b3
 });
 
 module.exports = router;
