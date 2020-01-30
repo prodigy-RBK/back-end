@@ -25,6 +25,21 @@ const addProducts = (id, product) => {
   ).populate("products.productId userId");
 };
 
+const updateProducts = (id, product) => {
+  return Order.update(
+    { _id: id, "products._id": product._id },
+    {
+      $set: {
+        "products.$.selectedSize": product.selectedSize,
+        "products.$.selectedQuantity": product.selectedQuantity,
+        "products.$.selectedColor": product.selectedColor,
+        "products.$.totalProductPrice": product.totalProductPrice
+      }
+    },
+    { useFindAndModify: false }
+  );
+};
+
 const deleteProducts = (id, product) => {
   return Order.findByIdAndUpdate(
     { _id: id },
@@ -37,4 +52,5 @@ module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
 module.exports.addProducts = addProducts;
 module.exports.deleteProducts = deleteProducts;
+module.exports.updateProducts = updateProducts;
 module.exports.getAllByUserId = getAllByUserId;

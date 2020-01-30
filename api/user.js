@@ -18,4 +18,15 @@ router.post("/login", (req, res) => {
   });
 });
 
+router.get("/confirmation/:token", confirmation, (req, res) => {
+  userOperations
+    .confirmation(req.user.email)
+    .then(response => {
+      console.log("respnse====<>", response);
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 module.exports = router;
