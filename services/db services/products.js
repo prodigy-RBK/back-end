@@ -34,6 +34,13 @@ const updateRatings = (id, rating) => {
   );
 };
 
+const updateProduct = (id, productDetails) => {
+  return Product.findOneAndUpdate({ _id: id }, productDetails, {
+    useFindAndModify: false,
+    new: true
+  });
+};
+
 const getAllByGender = gender => {
   return Product.find({ gender });
 };
@@ -41,6 +48,7 @@ const getAllByGender = gender => {
 module.exports.getAll = getAll;
 module.exports.addProduct = addProduct;
 module.exports.getOneById = getOneById;
+module.exports.updateProduct = updateProduct;
 module.exports.deleteProduct = deleteProduct;
 module.exports.updateRatings = updateRatings;
 module.exports.getAllByGender = getAllByGender;

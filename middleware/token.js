@@ -23,7 +23,9 @@ let createTokens = async (user) => {
   return Promise.all([createToken, createRefreshToken]);
 };
 
-
+let createConfirmationTokens = async (user) => {
+  return jwt.sign({ user }, secretKey, { expiresIn: '24h' });
+};
 let refreshTokens = async (req, res, next) => {
   var refreshToken = req.headers["x-refresh-token"]
   var token = req.headers["x-token"]
@@ -74,8 +76,25 @@ let refreshTokens = async (req, res, next) => {
   }
 }
 
+
+const confirmation = async (req, res, next) => {
+  try {
+    const { user } = jwt.verify(req.params.token, secretKey)
+    req.user = user
+    next()
+    // var update = user.UpdateToActive(resp.user.email)
+  } catch (err) {
+    res.status(401).send(invalidToken);
+    return
+  }
+
+}
+
+
 const invalidToken = new AuthResponse("Invalid Token", {});
 
 //module.exports = verifyToken;
 module.exports.createTokens = createTokens
 module.exports.refreshTokens = refreshTokens
+module.exports.confirmation = confirmation
+module.exports.createConfirmationTokens = createConfirmationTokens
