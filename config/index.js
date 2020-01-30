@@ -6,5 +6,6 @@ module.exports = {
   port: process.env.PORT || 3000,
   databaseURL: process.env.DATABASE_URI,
   secretKey: process.env.SECRET_KEY,
-  secretKey2: process.env.SECRET_KEY2
+  secretKey2: process.env.SECRET_KEY2,
+  googleKey: process.env.GOOGLE_KEY
 };
