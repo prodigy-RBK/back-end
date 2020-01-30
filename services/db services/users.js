@@ -18,8 +18,12 @@ const findUserById = id => {
     return User.findById(id);
 };
 
-const UpdateToActive = email => {
-    return User.findOneAndUpdate({ email }, { isActive: true });
+const UpdateToActive = async email => {
+    return await User.findOneAndUpdate({ email }, { isActive: true }, {
+        new: true,
+        useFindAndModify: false
+
+    });
 };
 
 const UpdateDate = () => {

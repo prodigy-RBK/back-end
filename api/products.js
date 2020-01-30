@@ -5,9 +5,8 @@ const { refreshTokens } = require("../middleware/token")
 
 router.get("/allproducts", refreshTokens, async (req, res) => {
   try {
-    console.log('---------------->', req.tokens)
-    let products = await productsService.getAll();
     tokens = req.tokens
+    let products = await productsService.getAll();
     res.status(200).json({ products, tokens });
   } catch (err) {
     res.status(500).json(err);
