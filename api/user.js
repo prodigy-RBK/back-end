@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userOperations = require("../operations/users");
 
-const { confirmation } = require("../middleware/token")
+const { confirmation } = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
   //console.log(req)
@@ -12,23 +12,21 @@ router.post("/signUp", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  userOperations.signIn(req)
-    .then(response => {
-      console.log(response)
-      res.send(response)
-    })
+  userOperations.signIn(req).then(response => {
+    console.log(response);
+    res.send(response);
+  });
 });
-
 
 router.get("/confirmation/:token", confirmation, (req, res) => {
-  userOperations.confirmation(req.user.email)
+  userOperations
+    .confirmation(req.user.email)
     .then(response => {
-      console.log("respnse====<>", response)
-      res.send(response)
+      console.log("respnse====<>", response);
+      res.send(response);
     })
     .catch(err => {
-      console.log(err)
-    })
+      console.log(err);
+    });
 });
-
 module.exports = router;
