@@ -5,7 +5,7 @@ const userOperations = require("../operations/users");
 const { confirmation } = require("../middleware/token")
 
 router.post("/signUp", (req, res) => {
-  //console.log(req)
+  console.log(req.body)
   userOperations.signUp(req).then(response => {
     res.send(response);
   });
@@ -23,8 +23,8 @@ router.post("/login", (req, res) => {
 router.get("/confirmation/:token", confirmation, (req, res) => {
   userOperations.confirmation(req.user.email)
     .then(response => {
-      console.log("respnse====<>", response)
-      res.send(response)
+      //console.log("respnse====<>", response)
+      res.redirect('http://localhost:8080/')//
     })
     .catch(err => {
       console.log(err)

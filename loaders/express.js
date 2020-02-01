@@ -15,6 +15,5 @@ module.exports = async app => {
   app.post("/api/multer", upload.array("myFiles", 12), (req, res) => {
     res.send(req.files);
   });
-  app.use("/api/user", user);
   app.use("/api/brand", brand);
 };

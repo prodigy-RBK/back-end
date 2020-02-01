@@ -7,8 +7,9 @@ module.exports.AuthResponse = class AuthResponse {
 
 
 module.exports.Details = class Details {
-    constructor(email, token) {
+    constructor(email, token, active = true) {
         this.email = email;
         this.token = token;
+        this.active = active
     }
 }
