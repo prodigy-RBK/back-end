@@ -10,7 +10,7 @@ const getAll = () => {
 };
 
 const getOneById = id => {
-  return Product.findOne({ _id: id });
+  return Product.findOne({ _id: id }).populate("brand");
 };
 
 const deleteProduct = id => {
