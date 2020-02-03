@@ -10,7 +10,7 @@ const { sendMail } = require("../middleware/mailer")
 require('../loaders/mongoose')
 
 var signUp = async request => {
-    console.log('request===>', request.body)
+    // console.log('request===>', request.body)
     return user.createUser(request.body)//request ==> {user details}
         .then(async newUser => {
             var token = await createConfirmationTokens(newUser)
@@ -57,6 +57,25 @@ const confirmation = async (email) => {
     }
 
 }
+
+
+const addUserInfoSocial = (request) => {
+    console.log(request)
+    return user.createUser(request)
+        .then((newUser) => {
+            const details = new rsponseModel.Details(newUser.email, {});
+            return new rsponseModel.AuthResponse("success", details);
+        }).catch(err => {
+            return serverErrorResponse;
+        })
+}
+
+const verificationEmail = async (email) => {
+    var response = await user.findUser(email)
+    return response ? true : false
+
+}
+
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
 const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});
@@ -67,3 +86,5 @@ const wrongEntryUsername = new rsponseModel.AuthResponse("wrong Username", {});
 module.exports.signUp = signUp;
 module.exports.signIn = signIn;
 module.exports.confirmation = confirmation
+module.exports.verificationEmail = verificationEmail
+module.exports.addUserInfoSocial = addUserInfoSocial
