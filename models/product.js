@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate");
 
 const productSchema = mongoose.Schema({
   title: {
@@ -31,8 +32,7 @@ const productSchema = mongoose.Schema({
     type: [
       {
         type: String,
-        default:
-          "https://gear.nitro.com/content/images/thumbs/default-image_600.png"
+        default: "https://gear.nitro.com/content/images/thumbs/default-image_600.png"
       }
     ]
   },
@@ -48,12 +48,14 @@ const productSchema = mongoose.Schema({
   tags: {
     type: [String]
   },
-  categorie: {
+  category: {
     type: String
   },
   gender: {
     type: String
   }
 });
+
+productSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Product", productSchema);

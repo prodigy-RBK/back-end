@@ -31,7 +31,7 @@ router.post("/order", async (req, res) => {
 
 router.put("/:id/products", async (req, res) => {
   try {
-    let order = await ordersService.addProducts(req.params.id, req.body);
+    let order = await ordersService.updateProducts(req.params.id, req.body);
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json(err);
