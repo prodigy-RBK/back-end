@@ -7,13 +7,7 @@ let storage = multer.diskStorage({
   },
   filename: function(req, file, cb) {
     console.log(file);
-    cb(
-      null,
-      `${ObjectId().toHexString()}.${file.mimetype.substring(
-        6,
-        file.mimetype.length
-      )}`
-    );
+    cb(null, `${ObjectId().toHexString()}.${file.mimetype.substring(6, file.mimetype.length)}`);
   }
 });
 

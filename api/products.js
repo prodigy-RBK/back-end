@@ -42,6 +42,17 @@ router.get("/tags/:gender", async (req, res) => {
   }
 });
 
+router.post("/search", async (req, res) => {
+  try {
+    const { brands, categories, tags, priceRange } = req.body;
+    let products = await productsOperation.searchForProducts(brands, categories, tags, priceRange);
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
 router.get("/page/:id", async (req, res) => {
   try {
     let products = await productsService.getByPageNumber(req.params.id);

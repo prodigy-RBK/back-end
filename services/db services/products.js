@@ -6,11 +6,11 @@ const addProduct = productDetails => {
 };
 
 const getAll = () => {
-  return Product.find();
+  return Product.find().populate("brand");
 };
 
 const getOneById = id => {
-  return Product.findOne({ _id: id });
+  return Product.findOne({ _id: id }).populate("brand");
 };
 
 const deleteProduct = id => {
@@ -53,6 +53,22 @@ const getTags = gender => {
   return Product.distinct("tags", { gender });
 };
 
+const searchForProducts = (brands, categories, tags, priceRange) => {
+  return Product.find({
+    brand: { $in: brands },
+    category: { $in: categories },
+    tags: { $in: tags },
+    $and: [
+      {
+        price: { $lte: parseInt(priceRange[1]) }
+      },
+      {
+        price: { $gte: parseInt(priceRange[0]) }
+      }
+    ]
+  }).populate("brand");
+};
+
 module.exports.getAll = getAll;
 module.exports.getTags = getTags;
 module.exports.addProduct = addProduct;
@@ -65,3 +81,4 @@ module.exports.getAllByGender = getAllByGender;
 module.exports.getByPageNumber = getByPageNumber;
 module.exports.numberOfProducts = numberOfProducts;
 module.exports.increaseOpinions = increaseOpinions;
+module.exports.searchForProducts = searchForProducts;
