@@ -5,7 +5,7 @@ const getAllByUserId = userId => {
 };
 
 const getOneById = (id, product) => {
-  return Order.findOne({ _id: id });
+  return Order.findOne({ _id: id }).populate("products.productId userId");
 };
 
 const createOrder = orderDetails => {
