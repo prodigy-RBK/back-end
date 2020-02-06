@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require('../loaders/mongoose')
+require("../loaders/mongoose");
 const userSchema = mongoose.Schema({
   firstName: {
     required: true,
@@ -40,7 +40,14 @@ const userSchema = mongoose.Schema({
   UpdatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  wishlist: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Product",
+      default: ""
+    }
+  ]
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -6,7 +6,9 @@ const addProduct = productDetails => {
 };
 
 const getAll = () => {
-  return Product.find().populate("brand");
+  return Product.find()
+    .populate("brand")
+    .sort({ price: 1 });
 };
 
 const getOneById = id => {
@@ -66,7 +68,9 @@ const searchForProducts = (brands, categories, tags, priceRange) => {
         price: { $gte: parseInt(priceRange[0]) }
       }
     ]
-  }).populate("brand");
+  })
+    .populate("brand")
+    .sort({ price: 1 });
 };
 
 module.exports.getAll = getAll;

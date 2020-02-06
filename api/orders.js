@@ -2,7 +2,7 @@ const router = require("express").Router();
 const ordersService = require("../services/db services/orders");
 const orderOperations = require("../operations/orders");
 
-router.get("/user/:id", async (req, res) => {
+router.get("/user", async (req, res) => {
   try {
     let order = await ordersService.getAllByUserId(req.params.id);
     res.status(200).json(order);
