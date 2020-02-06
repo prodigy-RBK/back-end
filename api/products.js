@@ -1,11 +1,12 @@
 const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
-const { refreshTokens } = require("../middleware/token");
+const { verifyRefreshTokens } = require("../middleware/token");
 
 router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
+    //  var user = req.user
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json(err);
