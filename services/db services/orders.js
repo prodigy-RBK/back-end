@@ -4,15 +4,13 @@ const getAllByUserId = userId => {
   return Order.find({ userId }).populate("products.productId userId");
 };
 
-const getOneById = id => {
-  return Order.findOne({
-    _id: id
-  }).populate("products.productId userId");
+const getOneById = (id, product) => {
+  return Order.findOne({ _id: id }).populate("products.productId userId");
 };
 
 const createOrder = orderDetails => {
   let order = new Order(orderDetails);
-  return order.save().populate("products.productId userId");
+  return order.save();
 };
 
 //not needed anymore
