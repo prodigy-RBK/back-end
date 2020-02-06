@@ -12,8 +12,7 @@ router.post("/signUp", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  userOperations.signIn(req).then(response => {
-    console.log(response);
+  userOperations.signIn(req, res).then(response => {
     res.send(response);
   });
 });
