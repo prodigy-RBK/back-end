@@ -5,24 +5,17 @@ const getAllByUserId = userId => {
 };
 
 const getOneById = (id, product) => {
-  return Order.findOne({
-    _id: id,
-    products: product
-  });
+  return Order.findOne({ _id: id }).populate("products.productId userId");
 };
 
 const createOrder = orderDetails => {
   let order = new Order(orderDetails);
-  return order.save().populate("products.productId userId");
+  return order.save();
 };
 
 //not needed anymore
 const addProducts = (id, product) => {
-  return Order.findByIdAndUpdate(
-    { _id: id },
-    { $push: { products: product } },
-    { useFindAndModify: false, new: true }
-  ).populate("products.productId userId");
+  return Order.findByIdAndUpdate({ _id: id }, { $push: { products: product } }, { useFindAndModify: false, new: true }).populate("products.productId userId");
 };
 
 const updateProducts = (id, product) => {
@@ -41,11 +34,7 @@ const updateProducts = (id, product) => {
 };
 
 const deleteProducts = (id, product) => {
-  return Order.findByIdAndUpdate(
-    { _id: id },
-    { $pull: { products: product } },
-    { useFindAndModify: false, new: true }
-  ).populate("products.productId userId");
+  return Order.findByIdAndUpdate({ _id: id }, { $pull: { products: product } }, { useFindAndModify: false, new: true }).populate("products.productId userId");
 };
 
 module.exports.getOneById = getOneById;

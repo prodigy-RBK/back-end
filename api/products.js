@@ -1,13 +1,15 @@
 const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
-const { refreshTokens } = require("../middleware/token");
+const { verifyRefreshTokens } = require("../middleware/token");
 
 router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
-    res.status(200).json(products);
+    //  var user = req.user
+    res.status(200).json(products)
   } catch (err) {
+
     res.status(500).json(err);
   }
 });
@@ -38,6 +40,17 @@ router.get("/tags/:gender", async (req, res) => {
     let tags = await productsService.getTags(gender);
     res.status(200).json(tags);
   } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.post("/search", async (req, res) => {
+  try {
+    const { brands, categories, tags, priceRange } = req.body;
+    let products = await productsOperation.searchForProducts(brands, categories, tags, priceRange);
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
