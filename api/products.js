@@ -3,7 +3,7 @@ const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
 const { verifyRefreshTokens } = require("../middleware/token");
 
-router.get("/allproducts", verifyRefreshTokens, async (req, res) => {
+router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
     //  var user = req.user
