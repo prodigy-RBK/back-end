@@ -29,16 +29,16 @@ var signUp = async request => {
         });
 };
 
-const signIn = async request => {
+const signIn = async (request, res) => {
     // return object if existing user , false if psw or username are wrong
     return user.findUser(request.body.email).then(async loginUser => {
         if (loginUser) {
-
             let psw = await bcrypt.compare(request.body.password, loginUser.password);
-
             if (psw) {
                 var tokens = await createTokens(loginUser)//tokens is an array of tokens
                 const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] }, loginUser.isActive);
+                res.set('x-token', tokens[0])
+                res.set('x-refresh-token', tokens[1])
                 return new rsponseModel.AuthResponse("success", details);
             }//else: ifpsw===false
             return wrongEntryPssword;

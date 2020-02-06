@@ -7,7 +7,10 @@ const upload = require("../middleware/multer");
 const brand = require("../api/brand");
 
 module.exports = async app => {
-  app.use(cors());
+  //app.use(cors());
+  app.use(cors({
+    exposedHeaders: ['Content-Length', 'x-token', 'x-refresh-token'],
+  }));
   app.use(express.json());
   app.use("/api/products", productsRouter);
   app.use("/api/orders", ordersRouter);

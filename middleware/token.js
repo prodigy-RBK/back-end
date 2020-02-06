@@ -6,8 +6,8 @@ const { OAuth2Client } = require('google-auth-library');
 const request = require("request");
 
 let createTokens = async (user) => {
-  const createToken = jwt.sign({ user }, secretKey, { expiresIn: '1m' });
-  const createRefreshToken = jwt.sign({ user }, secretKey2 + user.password, { expiresIn: '20m' });
+  const createToken = jwt.sign({ user }, secretKey, { expiresIn: '1h' });
+  const createRefreshToken = jwt.sign({ user }, secretKey2 + user.password, { expiresIn: '7d' });
 
   return Promise.all([createToken, createRefreshToken]);
 };
@@ -19,7 +19,6 @@ let createConfirmationTokens = async (user) => {
 let verifyRefreshTokens = async (req, res, next) => {
   var refreshToken = req.headers["x-refresh-token"]
   var token = req.headers["x-token"]
-  //
   const info = jwt.decode(token);
   if (info) {
     if (info.iss === 'accounts.google.com') {
@@ -89,13 +88,15 @@ let verifyRefreshTokens = async (req, res, next) => {
 
         const [newToken, newRefreshToken] = await createTokens(findUser);
 
-        var tokens = {
-          token: newToken,
-          refreshToken: newRefreshToken
-        };
-        //res.set('tokens', 'test')
-        req.user = { user: findUser }
-
+        res.set('x-token', newToken)
+        res.set('x-refresh-token', newRefreshToken)
+        const { firstName, lastName, _id } = findUser;
+        req.user = {
+          firstName,
+          lastName,
+          _id
+        }
+        console.log('=======================>', req.user)
         next();
 
       }

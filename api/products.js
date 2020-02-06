@@ -3,13 +3,13 @@ const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
 const { verifyRefreshTokens } = require("../middleware/token");
 
-router.post("/allproducts", async (req, res) => {
-
+router.get("/allproducts", verifyRefreshTokens, async (req, res) => {
   try {
     let products = await productsService.getAll();
     //  var user = req.user
-    res.status(200).send(products)
+    res.status(200).json(products)
   } catch (err) {
+
     res.status(500).json(err);
   }
 });
