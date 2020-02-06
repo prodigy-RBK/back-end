@@ -3,7 +3,6 @@ const rsponseModel = require("./responseModel")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { secretKey, secretKey2 } = require("../config/index");
-
 const { createTokens, createConfirmationTokens } = require("../middleware/token")
 const { sendMail } = require("../middleware/mailer")
 
@@ -30,16 +29,16 @@ var signUp = async request => {
         });
 };
 
-const signIn = async request => {
+const signIn = async (request, res) => {
     // return object if existing user , false if psw or username are wrong
     return user.findUser(request.body.email).then(async loginUser => {
         if (loginUser) {
-            // if user a teacher
             let psw = await bcrypt.compare(request.body.password, loginUser.password);
-
             if (psw) {
                 var tokens = await createTokens(loginUser)//tokens is an array of tokens
                 const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] }, loginUser.isActive);
+                res.set('x-token', tokens[0])
+                res.set('x-refresh-token', tokens[1])
                 return new rsponseModel.AuthResponse("success", details);
             }//else: ifpsw===false
             return wrongEntryPssword;
@@ -58,9 +57,8 @@ const confirmation = async (email) => {
 
 }
 
-
 const addUserInfoSocial = (request) => {
-    console.log(request)
+
     return user.createUser(request)
         .then((newUser) => {
             const details = new rsponseModel.Details(newUser.email, {});
