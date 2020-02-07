@@ -46,11 +46,10 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
     };
     //we need to add googleId to user schema
     userOperations.addUserInfoSocial(newUser).then(response => {
-      // res.redirect('https://localhost:5000/')
+      if (response.status) res.send({ status: true });
     });
   } else {
     res.send({ status: true });
-    // res.redirect('https://localhost:5000/productDetails')
   }
 });
 
@@ -77,17 +76,15 @@ router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
     };
     userOperations.addUserInfoSocial(newUser).then(response => {
       res.send({ status: true });
-      // res.redirect('https://localhost:5000/')
     });
   } else {
     res.send({ status: true });
-    // res.redirect('http://localhost:5000/')
   }
 });
 
 router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    const id = req.user.user._id;
+    const id = req.user._id;
     const wishlist = await userServices.getWishlist(id);
     res.status(200).json({ wishlist: wishlist.wishlist, inWishlist: true });
   } catch (err) {
@@ -99,7 +96,7 @@ router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
 router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
     console.log(req.user);
-    const id = req.user.user._id;
+    const id = req.user._id;
     const wishlist = await userServices.addToWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
@@ -110,7 +107,7 @@ router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
 
 router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    const id = req.user.user._id;
+    const id = req.user._id;
     const wishlist = await userServices.removeFromWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
