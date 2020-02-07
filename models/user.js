@@ -1,35 +1,35 @@
 const mongoose = require("mongoose");
-require('../loaders/mongoose')
+require("../loaders/mongoose");
 const userSchema = mongoose.Schema({
   firstName: {
-    // required: true,
+    required: true,
     type: String
   },
   lastName: {
-    // required: true,
+    required: true,
     type: String
   },
   email: {
     unique: true,
-    // required: true,
+    required: true,
     type: String
   },
   password: {
-    // required: true,
+    required: true,
     type: String
   },
   userType: {
-    // required: true,
+    required: true,
     type: String,
     default: "customer"
   },
   isActive: {
-    // required: true,
+    required: true,
     type: Boolean,
     default: false
   },
   hasOrdered: {
-    // required: true,
+    required: true,
     type: Boolean,
     default: false
   },
@@ -40,7 +40,14 @@ const userSchema = mongoose.Schema({
   UpdatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  wishlist: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Product",
+      unique: true
+    }
+  ]
 });
 
 module.exports = mongoose.model("User", userSchema);

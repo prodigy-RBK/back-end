@@ -1,13 +1,23 @@
 const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
-const { refreshTokens } = require("../middleware/token");
+const { verifyRefreshTokens } = require("../middleware/token");
 
 router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
     res.status(200).json(products);
   } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.post("/allproducts", async (req, res) => {
+  try {
+    let products = await productsService.getProducts(req.body.products);
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
