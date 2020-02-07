@@ -32,7 +32,7 @@ let verifyRefreshTokens = async (req, res, next) => {
           const payload = ticket.getPayload();
           console.log("payload===>", payload);
           const findUser = await user.findUser(payload.email);
-          req.user = { user: { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id } };
+          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id };
         }
         await verify();
         next();
