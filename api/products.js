@@ -6,9 +6,18 @@ const { verifyRefreshTokens } = require("../middleware/token");
 router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
-    //  var user = req.user
     res.status(200).json(products);
   } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.post("/allproducts", async (req, res) => {
+  try {
+    let products = await productsService.getProducts(req.body.products);
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
