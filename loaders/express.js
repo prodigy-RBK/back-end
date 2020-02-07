@@ -8,7 +8,10 @@ const brand = require("../api/brand");
 const analyticsRouter = require("../api/analytics");
 
 module.exports = async app => {
-  app.use(cors());
+  //app.use(cors());
+  app.use(cors({
+    exposedHeaders: ['Content-Length', 'x-token', 'x-refresh-token'],
+  }));
   app.use(express.json());
   app.use("/api/products", productsRouter);
   app.use("/api/analytics", analyticsRouter);
