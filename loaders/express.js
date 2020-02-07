@@ -8,6 +8,7 @@ const brand = require("../api/brand");
 const path = require("path");
 const charge = require("../middleware/stripe");
 const analyticsRouter = require("../api/analytics");
+const fashionApi = require("../api/fashion");
 
 module.exports = async app => {
   //app.use(cors());
@@ -22,6 +23,7 @@ module.exports = async app => {
   app.use("/api/orders", ordersRouter);
   app.use("/api/products", productsRouter);
   app.use("/api/analytics", analyticsRouter);
+  app.use("/api/articles", fashionApi);
   app.post("/api/multer", upload.array("myFiles", 12), (req, res) => {
     res.send(req.files);
   });
