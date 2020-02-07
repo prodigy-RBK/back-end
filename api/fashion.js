@@ -1,13 +1,10 @@
 const router = require("express").Router();
-const fashionService = require("../services/fashion api/fashion");
+const fashionOperation = require("../operations/fashion");
 
 router.get("/", async (req, res) => {
-  try {
-    let articles = await fashionService.getFiveMostPopularArticles();
-    res.status(200).json(JSON.parse(articles));
-  } catch (err) {
-    res.status(500).send(err);
-  }
+  let articles = await fashionOperation.fetchArticles();
+  if (articles.err) return res.status(500).send(articles);
+  res.status(200).json(articles);
 });
 
 module.exports = router;
