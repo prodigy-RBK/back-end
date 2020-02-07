@@ -5,11 +5,13 @@ const user = require("../api/user");
 const ordersRouter = require("../api/orders");
 const upload = require("../middleware/multer");
 const brand = require("../api/brand");
+const analyticsRouter = require("../api/analytics");
 
 module.exports = async app => {
   app.use(cors());
   app.use(express.json());
   app.use("/api/products", productsRouter);
+  app.use("/api/analytics", analyticsRouter);
   app.use("/api/orders", ordersRouter);
   app.use("/api/user", user);
   app.post("/api/multer", upload.array("myFiles", 12), (req, res) => {
