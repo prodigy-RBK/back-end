@@ -3,9 +3,9 @@ const ordersService = require("../services/db services/orders");
 const orderOperations = require("../operations/orders");
 const { verifyRefreshTokens } = require("../middleware/token");
 
-router.get("/user/:id", verifyRefreshTokens, async (req, res) => {
+router.get("/user", verifyRefreshTokens, async (req, res) => {
   try {
-    let order = await ordersService.getAllByUserId(req.params.id);
+    let order = await ordersService.getAllByUserId(req.user._id);
     res.status(200).json(order);
   } catch (err) {
     res.status(500).json(err);
