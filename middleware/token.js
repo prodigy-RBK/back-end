@@ -32,7 +32,7 @@ let verifyRefreshTokens = async (req, res, next) => {
           const payload = ticket.getPayload();
           console.log("payload===>", payload);
           const findUser = await user.findUser(payload.email);
-          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id };
+          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id, isActive: findUser.isActive };
         }
         await verify();
         next();
@@ -46,11 +46,12 @@ let verifyRefreshTokens = async (req, res, next) => {
       // console.log('---->', jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJUeXBlIjoiY3VzdG9tZXIiLCJpc0FjdGl2ZSI6dHJ1ZSwiaGFzT3JkZXJlZCI6ZmFsc2UsIl9pZCI6IjVlM2FkMDNiMDNiYTYwMWRkMDg0ZGI3MyIsImZpcnN0TmFtZSI6Im1laGRpIiwibGFzdE5hbWUiOiJjdmJuaiwiLCJlbWFpbCI6Im1mbWVoZGkyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEYzYXd2NU1sQUZCamY0R01Pb0tVMmV1c2UySVdUUFZEdmo4T2U3MWlIZk1WbkYyZ0NCeHg2IiwiY3JlYXRpb25EYXRlIjoiMjAyMC0wMi0wNVQxNDoyNDo1OS4zMzdaIiwiVXBkYXRlZEF0IjoiMjAyMC0wMi0wNVQxNDoyNDo1OS4zMzdaIiwiX192IjowfSwiaWF0IjoxNTgwOTE1Njc2LCJleHAiOjE1ODA5MTY4NzZ9.RUxQ3gmIM8l9SWmy3wB86DnMQv9hwJjsKIUaRsP3grg', secretKey))
       try {
         const data = jwt.verify(token, secretKey);
-        const { firstName, lastName, _id } = data.user;
+        const { firstName, lastName, _id, isActive } = data.user;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
 
         next();
@@ -87,11 +88,12 @@ let verifyRefreshTokens = async (req, res, next) => {
 
         res.set("x-token", newToken);
         res.set("x-refresh-token", newRefreshToken);
-        const { firstName, lastName, _id } = findUser;
+        const { firstName, lastName, _id, isActive } = findUser;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
         next();
       }

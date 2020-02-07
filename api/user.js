@@ -57,7 +57,7 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
 });
 
 router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
-  res.send({ authed: true });
+  res.send({ authed: true, isActive: req.user.isActive });
 });
 
 router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
