@@ -30,7 +30,6 @@ router.get("/confirmation/:token", confirmation, (req, res) => {
 });
 
 router.post("/login/social", confirmationSocial, async (req, res) => {
-  //console.log("----->", Math.random().toString(36).substring(2, 16) + Math.random().toString(36).substring(2, 15), '************')
   var verificationEmail = await userOperations.verificationEmail(req.userInfo.email);
   if (!verificationEmail) {
     var newUser = {
@@ -48,7 +47,7 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
     };
     //we need to add googleId to user schema
     userOperations.addUserInfoSocial(newUser).then(response => {
-      console.log(response);
+      if (response.status) res.send({ status: true });
       // res.redirect('https://localhost:5000/')
     });
   } else {
@@ -62,8 +61,6 @@ router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
 });
 
 router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
-  //console.log("----->", Math.random().toString(36).substring(2, 16) + Math.random().toString(36).substring(2, 15), '************')
-
   var verificationEmail = await userOperations.verificationEmail(req.userInfo.email);
   if (!verificationEmail) {
     var newUser = {
@@ -82,11 +79,9 @@ router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
     userOperations.addUserInfoSocial(newUser).then(response => {
       console.log(response);
       res.send({ status: true });
-      // res.redirect('https://localhost:5000/')
     });
   } else {
     res.send({ status: true });
-    // res.redirect('http://localhost:5000/')
   }
 });
 module.exports = router;
