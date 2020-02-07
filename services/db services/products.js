@@ -10,6 +10,9 @@ const getAll = () => {
     .populate("brand")
     .sort({ price: 1 });
 };
+const getProducts = productsId => {
+  return Product.find({ _id: { $in: productsId } });
+};
 
 const getOneById = id => {
   return Product.findOne({ _id: id }).populate("brand");
@@ -77,6 +80,7 @@ module.exports.getAll = getAll;
 module.exports.getTags = getTags;
 module.exports.addProduct = addProduct;
 module.exports.getOneById = getOneById;
+module.exports.getProducts = getProducts;
 module.exports.updateProduct = updateProduct;
 module.exports.getCategories = getCategories;
 module.exports.deleteProduct = deleteProduct;

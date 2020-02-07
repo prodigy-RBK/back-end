@@ -16,7 +16,7 @@ const findUser = email => {
 };
 
 const findUserById = id => {
-  return User.findById(id);
+  return User.findById({ _id: id });
 };
 
 const UpdateToActive = async email => {
@@ -35,15 +35,15 @@ const UpdateDate = () => {
 };
 
 const getWishlist = id => {
-  return User.findOne({ _id: id }).populate("wishlist");
+  return User.findOne({ _id: id });
 };
 
 const addToWishlist = (id, product) => {
-  return User.findByIdAndUpdate({ _id: id }, { $push: { wishlist: product } }, { useFindAndModify: false, new: true }).populate("wishlist");
+  return User.findByIdAndUpdate({ _id: id }, { $push: { wishlist: product } }, { useFindAndModify: false, new: true });
 };
 
 const removeFromWishlist = (id, product) => {
-  return User.findByIdAndUpdate({ _id: id }, { $pull: { wishlist: ObjectId(product) } }, { useFindAndModify: false, new: true }).populate("wishlist");
+  return User.findByIdAndUpdate({ _id: id }, { $pull: { wishlist: ObjectId(product) } }, { useFindAndModify: false, new: true });
 };
 
 module.exports.findUser = findUser;
@@ -54,11 +54,3 @@ module.exports.findUserById = findUserById;
 module.exports.addToWishlist = addToWishlist;
 module.exports.UpdateToActive = UpdateToActive;
 module.exports.removeFromWishlist = removeFromWishlist;
-
-// this.createUser({
-//     firstName: 'mehdi',
-//     lastname: 'farjallah',
-//     email: 'mfmehdi2@gmail.com',
-//     password: '123456',
-//     userType: "customer",
-// })

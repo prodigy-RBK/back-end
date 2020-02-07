@@ -45,7 +45,7 @@ const userSchema = mongoose.Schema({
     {
       type: mongoose.Schema.ObjectId,
       ref: "Product",
-      default: ""
+      unique: true
     }
   ]
 });

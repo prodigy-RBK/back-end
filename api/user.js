@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userOperations = require("../operations/users");
 const userServices = require("../services/db services/users");
-const { verifyRefreshTokens } = require("../middleware/token");
-const { confirmation, confirmationSocial, confirmationSocialFacebook } = require("../middleware/token");
+const { confirmation, confirmationSocial, confirmationSocialFacebook, verifyRefreshTokens } = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
   userOperations.signUp(req).then(response => {
@@ -55,6 +54,11 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
   }
 });
 
+router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
+  res.send({ authed: true });
+});
+
+router.get("/userprofile", async (req, res) => {});
 router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
   var verificationEmail = await userOperations.verificationEmail(req.userInfo.email);
   if (!verificationEmail) {
@@ -81,36 +85,36 @@ router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
   }
 });
 
-//need to add the middleware to get the id
 router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    console.log(req.user);
-    const id = "5e3aa7b4ec4d353da80dbd7c";
+    const id = req.user.user._id;
     const wishlist = await userServices.getWishlist(id);
-    res.status(200).json(wishlist.wishlist);
+    res.status(200).json({ wishlist: wishlist.wishlist, inWishlist: true });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-//need to add the middleware to get the id
-router.put("/wishlist", async (req, res) => {
+router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    const id = "5e3aa7b4ec4d353da80dbd7c";
+    console.log(req.user);
+    const id = req.user.user._id;
     const wishlist = await userServices.addToWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-//need to add the middleware to get the id
-router.delete("/wishlist", async (req, res) => {
+router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    const id = "5e3aa7b4ec4d353da80dbd7c";
+    const id = req.user.user._id;
     const wishlist = await userServices.removeFromWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });

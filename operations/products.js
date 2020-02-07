@@ -14,5 +14,11 @@ const searchForProducts = (brands, categories, tags, priceRange) => {
   return productsService.searchForProducts(fixedBrandsId, categories, tags, priceRange);
 };
 
+const getProducts = productsId => {
+  fixedProductsId = productsId.map(elm => ObjectId(elm));
+  return productsService.getProducts(fixedProductsId);
+};
+
+module.exports.getProducts = getProducts;
 module.exports.updateRating = updateRating;
 module.exports.searchForProducts = searchForProducts;

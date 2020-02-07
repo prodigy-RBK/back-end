@@ -14,43 +14,35 @@ var brands = [
   },
   {
     name: "Tommy Hilfiger",
-    image:
-      "https://img.favpng.com/6/7/1/tommy-hilfiger-fashion-pvh-logo-clothing-png-favpng-f026Gsu3CfUs0LjPPq2C2jXUC.jpg"
+    image: "https://img.favpng.com/6/7/1/tommy-hilfiger-fashion-pvh-logo-clothing-png-favpng-f026Gsu3CfUs0LjPPq2C2jXUC.jpg"
   },
   {
     name: "Under Armour",
-    image:
-      "https://banner2.cleanpng.com/20180529/lfs/kisspng-under-armour-logo-clothing-sportswear-5b0d400ec348e6.4838299415275950227999.jpg"
+    image: "https://banner2.cleanpng.com/20180529/lfs/kisspng-under-armour-logo-clothing-sportswear-5b0d400ec348e6.4838299415275950227999.jpg"
   },
   {
     name: "Michael Kors",
-    image:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/3/32/Michael_Kors_%28brand%29_logo.svg/603px-Michael_Kors_%28brand%29_logo.svg.png"
+    image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/32/Michael_Kors_%28brand%29_logo.svg/603px-Michael_Kors_%28brand%29_logo.svg.png"
   },
   {
     name: "Calvin Klein",
-    image:
-      "https://img.favpng.com/2/4/24/calvin-klein-logo-ck-be-brand-clothing-png-favpng-uDqK4J4kEd7r18r3Ti85W6k8z.jpg"
+    image: "https://img.favpng.com/2/4/24/calvin-klein-logo-ck-be-brand-clothing-png-favpng-uDqK4J4kEd7r18r3Ti85W6k8z.jpg"
   },
   {
     name: "Ralph Lauren",
-    image:
-      "https://banner2.cleanpng.com/20180526/hpr/kisspng-t-shirt-ralph-lauren-corporation-polo-shirt-iron-o-5b09e6f2d0ce54.9246475115273756028553.jpg"
+    image: "https://banner2.cleanpng.com/20180526/hpr/kisspng-t-shirt-ralph-lauren-corporation-polo-shirt-iron-o-5b09e6f2d0ce54.9246475115273756028553.jpg"
   },
   {
     name: "Abercrombie and Fitch",
-    image:
-      "https://toppng.com/uploads/preview/abercrombie-and-fitch-eps-vector-logo-free-download-11573991710tzqxcwz5rk.png"
+    image: "https://toppng.com/uploads/preview/abercrombie-and-fitch-eps-vector-logo-free-download-11573991710tzqxcwz5rk.png"
   },
   {
     name: "Armani",
-    image:
-      "https://banner2.cleanpng.com/20180529/lwu/kisspng-armani-calvin-klein-logo-fashion-designer-5b0d71053afc25.3895305315276075572416.jpg"
+    image: "https://banner2.cleanpng.com/20180529/lwu/kisspng-armani-calvin-klein-logo-fashion-designer-5b0d71053afc25.3895305315276075572416.jpg"
   },
   {
     name: "Bershka",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Bershka_logo.svg/1280px-Bershka_logo.svg.png"
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Bershka_logo.svg/1280px-Bershka_logo.svg.png"
   },
   {
     name: "Hollister",
@@ -58,8 +50,7 @@ var brands = [
   },
   {
     name: "Lacoste",
-    image:
-      "https://banner2.cleanpng.com/20180612/cau/kisspng-lacoste-brand-fifth-avenue-logo-lacoste-logo-5b1feec65e9f23.7064223515288193983876.jpg"
+    image: "https://banner2.cleanpng.com/20180612/cau/kisspng-lacoste-brand-fifth-avenue-logo-lacoste-logo-5b1feec65e9f23.7064223515288193983876.jpg"
   },
   {
     name: "New Balance",
@@ -70,30 +61,8 @@ var brands = [
 var genders = ["Men", "Women"];
 
 var categories = {
-  men: [
-    "Footwear",
-    "Jeans & Trousers",
-    "Jewelery & Watches",
-    "Knitwear & Sweats",
-    "Outerwear",
-    "Shorts",
-    "Suits",
-    "Swimwear",
-    "Tops"
-  ],
-  women: [
-    "Dresses",
-    "Footwear",
-    "Jeans & Trousers",
-    "Jewelery & Watches",
-    "Knitwear & Sweats",
-    "Outerwear",
-    "Skirts",
-    "Shorts",
-    "Suits",
-    "Swimwear",
-    "Tops"
-  ]
+  men: ["Footwear", "Jeans & Trousers", "Jewelery & Watches", "Knitwear & Sweats", "Outerwear", "Shorts", "Suits", "Swimwear", "Tops"],
+  women: ["Dresses", "Footwear", "Jeans & Trousers", "Jewelery & Watches", "Knitwear & Sweats", "Outerwear", "Skirts", "Shorts", "Suits", "Swimwear", "Tops"]
 };
 
 var sizes = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -276,8 +245,7 @@ function populateFakeBrands() {
   console.log("entering populate brands");
   for (let i = 0; i < brands.length; i++) {
     let fakeBrand = {
-      email:
-        brands[i].name.toLocaleLowerCase().replace(/ /g, "") + "@gmail.com",
+      email: brands[i].name.toLocaleLowerCase().replace(/ /g, "") + "@gmail.com",
       password: "password",
       image: brands[i].image,
       name: brands[i].name
@@ -293,17 +261,13 @@ function populateFakeProducts() {
     // yourservice.getAllBrands
     let memory = "";
     for (let i = 0; i < 30; i++) {
-      request("https://source.unsplash.com/1600x900/?product", function(
-        error,
-        response
-      ) {
+      request("https://source.unsplash.com/1600x900/?product", function(error, response) {
         // Print the response status code if a response was received
         if (response.request.href !== memory) {
           let maxTags = Math.floor(Math.random() * Math.floor(4)) + 1;
           let tagsArr = [];
           for (let i = 0; i < maxTags; i++) {
-            let valueToPush =
-              tags[Math.floor(Math.random() * Math.floor(tags.length))];
+            let valueToPush = tags[Math.floor(Math.random() * Math.floor(tags.length))];
             if (tagsArr.indexOf(valueToPush) >= 0) {
               i--;
             } else {
@@ -313,8 +277,7 @@ function populateFakeProducts() {
           let maxColors = Math.floor(Math.random() * Math.floor(4)) + 1;
           let colorsArr = [];
           for (let j = 0; j < maxColors; j++) {
-            let valueToPush =
-              colors[Math.floor(Math.random() * Math.floor(colors.length))];
+            let valueToPush = colors[Math.floor(Math.random() * Math.floor(colors.length))];
             if (colorsArr.indexOf(valueToPush) >= 0) {
               i--;
             } else {
@@ -326,8 +289,7 @@ function populateFakeProducts() {
             let maxSizes = Math.floor(Math.random() * Math.floor(sizes.length));
             let uniqueSizes = [];
             for (let k = 0; k < maxSizes; k++) {
-              let valueToPush =
-                sizes[Math.floor(Math.random() * Math.floor(sizes.length))];
+              let valueToPush = sizes[Math.floor(Math.random() * Math.floor(sizes.length))];
               if (uniqueSizes.indexOf(valueToPush) >= 0) {
                 i--;
               } else {
@@ -349,18 +311,9 @@ function populateFakeProducts() {
             title: faker.commerce.productName(),
             description: faker.lorem.sentence(20),
             price: parseInt(faker.commerce.price()),
-            brand:
-              brands[Math.floor(Math.random() * Math.floor(brands.length))]._id,
+            brand: brands[Math.floor(Math.random() * Math.floor(brands.length))]._id,
             gender: genders[genIndx],
-            category:
-              categories[genders[genIndx].toLowerCase()][
-                Math.floor(
-                  Math.random() *
-                    Math.floor(
-                      categories[genders[genIndx].toLowerCase()].length
-                    )
-                )
-              ],
+            category: categories[genders[genIndx].toLowerCase()][Math.floor(Math.random() * Math.floor(categories[genders[genIndx].toLowerCase()].length))],
             tags: tagsArr,
             availability: availability,
             images: [response.request.href]
