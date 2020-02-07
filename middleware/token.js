@@ -98,7 +98,6 @@ let verifyRefreshTokens = async (req, res, next) => {
       //}
     }
   } else {
-    console.log("facebook");
     confirmationSocialFacebook(req, res, next);
   }
 };
@@ -121,10 +120,10 @@ const confirmationSocial = async (req, res, next) => {
     const userInfo = jwt.decode(req.body.token);
     if (userInfo.iss === "accounts.google.com") {
       req.userInfo = userInfo;
+      //res.set("x-token", req.body.token);
       next();
     }
   } catch (err) {
-    console.log(err);
     res.status(401).send(invalidToken);
     return;
   }
@@ -159,8 +158,9 @@ const confirmationSocialFacebook = async (req, res, next) => {
         request(options2, (err, resp) => {
           var userInfo = JSON.parse(resp.body);
           userInfo.email = req.body.email;
-          console.log("-facebook-->", userInfo);
+
           req.userInfo = userInfo;
+          res.set("x-token", req.body.token);
           next();
         });
       } else {
@@ -169,7 +169,6 @@ const confirmationSocialFacebook = async (req, res, next) => {
       }
     });
   } catch (err) {
-    console.log(err);
     res.status(401).send(invalidToken);
     return;
   }

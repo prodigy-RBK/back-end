@@ -10,7 +10,7 @@ const getOneById = (id, product) => {
 
 const createOrder = orderDetails => {
   let order = new Order(orderDetails);
-  return order.save().populate("products.productId userId");
+  return order.save();
 };
 
 //not needed anymore
