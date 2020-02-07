@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "aerobic-orbit-267414",
+  "private_key_id": "37423e3c90baebe2923804e2cbe3ba032d1910e5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCppoHT9BEdvxKv\npTJNBMFJ8BSq/nOn0VA2Tb9XSA05d8gFHogkV5i6UyaPUVUlULTPq3i2jb4v4gio\nCS46FkqZx3Vce5loBNvDZBbMKvk6MxnonQ+OxtY/fDuJLzJl0mkJVJxQPjUvtjX4\nLgsCbURPqS/4kRs3Xse5DRiMSMy3EE0OgmTqIl5DifTdISAEZgzcVKbOS8CHGAWu\nhl3vsLeyUxeGLGc+rHlZTdDU9NDB6RBBWXaozKtouuoCgETfALGW2sP/zOVox5qH\nBEPn4xGnmvLYIFeciBV5FhUYhTTz0OQTz/T1v3tY8W3DMVFG4b/UO9s7ZBhBgo7d\nP304NmfHAgMBAAECggEAEBpambsW933a0N/wpa2H3fQd4hqDm9rwWYHeYZ3YiNXn\nyc9GGOeqUDVITwjnThgaXC6TJ1t46/lGh7ynWKLOXfO4HhkqodxO3SheSZmNTTWV\n21CH2NjiyTqKOXvzYAWC1tHjLHKwgGDelToO7XdgU+IOnZzDD+m9MhbIzQ1em8RB\nPmcfBA4j6fUH3IaQmCdpBlXyRye8Npq4GpXFj3K8hS86FVypk4s6QcTw5Hc5UG2g\na6B7p2cuS65NWE8Z7IiXDKKz91uHT7zzDGYFa//Wp3r7q9rNMqiMeFOASqIv18VV\nmc80rkAGEP0FkQYEwXNMJGTN63HA5WvYhAgxly2QMQKBgQDmaUarcSpgirz5QRUt\npAK9TvJQY6VqFwo+XwIwVkEvyf5bZvHCcPOLIVHVmJU3CG+UcubqCJkoSIBZM60N\ndBAhSPGMhuv7g6cBBrgONQB2W6JmLl8Tq8e/XDzddu++98p3ywfAN5TP2FZhpP5e\nWYfDyr2YW1YyNanONWjqKO1CjQKBgQC8fcQhRGjjoHQ8mExDo1uNihRQOclmD9qx\nK+IAVeek/gr2syhcT4qLoS1kjrPPEsP9ollWnDBQjesgE/ivBhflVMexeZzYpBE0\nEl/xd0xl73k6pszFu3RnTl7iflZI7+63mjRkJW6dTdUwB3HXDBO2Mv3StXzqcUW6\niuRc0XsoowKBgENhE+58yHS0/bAyTRwsszRjCs9hZHUSyccVh5FVF/j+q+hUwWwo\nFcBg/QpmdXRDfkW+GDLmUsuJ8Calyvx9LV5ec2yx4/6IMGVHbrmQ3FLAV0xkUR9y\ng5Y9RftJlbCVy9qeP+UBG/5v+ErTsiMrMV2bQzhztVA3izGnQsf/MerdAoGBALKP\nYbEyITsh0XtluzmIEz7uQ3gMhiHNexrDu4Ed4CeJEdHKvr1UDKdhtKLCHMxZtpkb\npw5JP+vPxaHJyZfkadayjcoursr8AeAWWBVjMliOl4VcZjga8Ja8w15E2HCX+sir\nqF4Gp9cU2JR7OPjDVBkSDSoDC6b8T1X8JYFYYReJAoGAMK4/BIRKhZcMnj5gIkdb\nOqTvELAOlj14mvszhMzUca4Qmc4JICP/aILWiXxXO/Mdue5nzrDq7U7H8EwjCu47\ngmrjIcIlTG+HZwtsXv6qNtWg0xDlw5jD3zP+L9B1Y4OuoGstlvB2MetsOiVn2VPk\nGNom2Xdk+OXLyAkoa4uIwxU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "ecommercewebsite@aerobic-orbit-267414.iam.gserviceaccount.com",
+  "client_id": "114204479892597928894",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ecommercewebsite%40aerobic-orbit-267414.iam.gserviceaccount.com"
+}
