@@ -53,7 +53,19 @@ const productSchema = mongoose.Schema({
   },
   gender: {
     type: String
-  }
+  },
+  reviews: [
+    {
+      review: String,
+      user: String,
+      reply: [
+        {
+          reply: String,
+          brand: String
+        }
+      ]
+    }
+  ]
 });
 
 productSchema.plugin(mongoosePaginate);
