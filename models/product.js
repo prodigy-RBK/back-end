@@ -58,10 +58,18 @@ const productSchema = mongoose.Schema({
     {
       review: String,
       user: String,
+      creationDate: {
+        type: Date,
+        default: Date.now
+      },
       reply: [
         {
           reply: String,
-          brand: String
+          brand: String,
+          creationDate: {
+            type: Date,
+            default: Date.now
+          }
         }
       ]
     }
