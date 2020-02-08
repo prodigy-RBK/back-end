@@ -22,11 +22,6 @@ const orderSchema = mongoose.Schema({
     ref: "User",
     required: true
   },
-  cardInfo: {
-    card_number: Number,
-    expiration: Number,
-    ccv: Number
-  },
   paymentMethod: String,
   orderStatus: {
     type: String,
