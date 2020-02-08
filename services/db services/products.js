@@ -1,4 +1,5 @@
 const Product = require("../../models/Product");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const addProduct = productDetails => {
   const product = new Product(productDetails);
@@ -76,8 +77,23 @@ const searchForProducts = (brands, categories, tags, priceRange) => {
     .sort({ price: 1 });
 };
 
+const addReview = (productId, review) => {
+  return Product.findByIdAndUpdate({ _id: productId }, { $push: { reviews: review } }, { useFindAndModify: false, new: true });
+};
+
+const addReply = (productId, reply) => {
+  console.log(reply);
+  return Product.update(
+    { _id: productId, "reviews._id": ObjectId(reply.reviewId) },
+    { $push: { "reviews.$.reply": reply } },
+    { useFindAndModify: false, new: true }
+  );
+};
+
 module.exports.getAll = getAll;
 module.exports.getTags = getTags;
+module.exports.addReply = addReply;
+module.exports.addReview = addReview;
 module.exports.addProduct = addProduct;
 module.exports.getOneById = getOneById;
 module.exports.getProducts = getProducts;
