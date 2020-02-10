@@ -99,9 +99,10 @@ router.put("/:id/rating", async (req, res) => {
   }
 });
 
-router.put("/:id/review", async (req, res) => {
+router.put("/:id/review", verifyRefreshTokens, async (req, res) => {
   try {
-    let updatedProduct = await productsService.addReview(req.params.id, req.body);
+    console.log(req.body);
+    let updatedProduct = await productsService.addReview(req.params.id, req.body.review, req.user);
     res.status(200).json(updatedProduct);
   } catch (err) {
     res.status(500).json(err);

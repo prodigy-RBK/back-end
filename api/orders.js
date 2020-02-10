@@ -23,7 +23,7 @@ router.get("/:id", verifyRefreshTokens, async (req, res) => {
 
 router.post("/order", verifyRefreshTokens, async (req, res) => {
   try {
-    let order = await orderOperations.createOrder(req.user._id, req.body);
+    let order = await ordersService.createOrder(req.user._id, req.body);
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json(err);

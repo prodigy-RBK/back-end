@@ -77,8 +77,19 @@ const searchForProducts = (brands, categories, tags, priceRange) => {
     .sort({ price: 1 });
 };
 
-const addReview = (productId, review) => {
-  return Product.findByIdAndUpdate({ _id: productId }, { $push: { reviews: review } }, { useFindAndModify: false, new: true });
+const addReview = (productId, review, user) => {
+  return Product.findByIdAndUpdate(
+    { _id: productId },
+    {
+      $push: {
+        reviews: {
+          user: `${user.firstName} ${user.lastName}`,
+          review
+        }
+      }
+    },
+    { useFindAndModify: false, new: true }
+  );
 };
 
 const addReply = (productId, reply) => {
