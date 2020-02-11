@@ -17,7 +17,6 @@ router.post("/allproducts", async (req, res) => {
     let products = await productsService.getProducts(req.body.products);
     res.status(200).json(products);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -83,7 +82,7 @@ router.get("/gender/:id", async (req, res) => {
 
 router.post("/product", async (req, res) => {
   try {
-    let product = await productsService.addProduct(req.body);
+    let product = await productsOperation.addProduct(req.body);
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json(err);

@@ -93,7 +93,6 @@ const addReview = (productId, review, user) => {
 };
 
 const addReply = (productId, reply) => {
-  console.log(reply);
   return Product.update(
     { _id: productId, "reviews._id": ObjectId(reply.reviewId) },
     { $push: { "reviews.$.reply": reply } },
