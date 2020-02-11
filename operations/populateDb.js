@@ -1,6 +1,6 @@
 const request = require("request");
 const Brand = require("../services/db services/brands");
-const Product = require("../services/db services/products");
+const Product = require("../operations/products");
 const faker = require("faker");
 var brands = [
   {
@@ -307,11 +307,12 @@ function populateFakeProducts() {
           });
           console.log(2, availability);
           let genIndx = Math.floor(Math.random() * Math.floor(genders.length));
+          let brandId = brands[Math.floor(Math.random() * Math.floor(brands.length))]._id;
           let fakeProduct = {
             title: faker.commerce.productName(),
             description: faker.lorem.sentence(20),
             price: parseInt(faker.commerce.price()),
-            brand: brands[Math.floor(Math.random() * Math.floor(brands.length))]._id,
+            brand: brandId,
             gender: genders[genIndx],
             category: categories[genders[genIndx].toLowerCase()][Math.floor(Math.random() * Math.floor(categories[genders[genIndx].toLowerCase()].length))],
             tags: tagsArr,
@@ -320,7 +321,7 @@ function populateFakeProducts() {
           };
           console.log(3);
 
-          Product.addProduct(fakeProduct); // yourService.addProduct(fakeProduct)
+          Product.addProduct(brandId, fakeProduct); // yourService.addProduct(fakeProduct)
           memory = response.request.href;
         }
         console.log("added product");

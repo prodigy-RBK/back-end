@@ -14,6 +14,7 @@ app.listen(port, err => {
   console.log(`Server is running on port ${port}`);
 });
 
+app.get("/", (req, res) => res.send("Hello!"));
 app.get("/populatebrands", (req, res) => {
   populate.populateFakeBrands();
   res.send("ee");
