@@ -30,7 +30,6 @@ describe("USER", function() {
         }
       },
       function(error, response, body) {
-        console.log(response.body);
         expect(response.statusCode).to.equal(200);
         expect(response.body.status).to.equal("success");
 
@@ -68,7 +67,6 @@ describe("USER", function() {
       async function(error, response, body) {
         expect(response.statusCode).to.equal(200);
         expect(response.body.details).to.not.have.own.property("token");
-
         done();
       }
     );
