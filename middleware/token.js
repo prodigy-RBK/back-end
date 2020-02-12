@@ -30,9 +30,8 @@ let verifyRefreshTokens = async (req, res, next) => {
             //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJUeXBlIjoiY3VzdG9tZXIiLCJpc0FjdGl2ZSI6ZmFsc2UsImhhc09yZGVyZWQiOmZhbHNlLCJfaWQiOiI1ZTM3MGFiMWI3YmM0ODE0YzAzZmQ3Y2IiLCJmaXJzdE5hbWUiOiJNIiwibGFzdE5hbWUiOiJGIiwiZW1haWwiOiJNRk1FSERJM0BHTUFJTC5DT00iLCJwYXNzd29yZCI6IiQyYSQxMCQ2VExBQzM1dllNdEZvVDlXQS5xcmZPZHR3TldIQjA1VC5VbkZVU21ja1ZBMFBUSzZCTnhzMiIsImNyZWF0aW9uRGF0ZSI6IjIwMjAtMDItMDJUMTc6NDU6MjEuMDYxWiIsIlVwZGF0ZWRBdCI6IjIwMjAtMDItMDJUMTc6NDU6MjEuMDYxWiIsIl9fdiI6MH0sImlhdCI6MTU4MDY2NTU0MCwiZXhwIjoxNTgwNjY1NjAwfQ.7bRGGH6TQpmfZY8wegFmVN--pRHBJXUI1KAegFzC9Yo",
           });
           const payload = ticket.getPayload();
-          console.log("payload===>", payload);
           const findUser = await user.findUser(payload.email);
-          req.user = { user: { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id } };
+          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id, isActive: findUser.isActive };
         }
         await verify();
         next();
@@ -43,14 +42,14 @@ let verifyRefreshTokens = async (req, res, next) => {
     } else {
       let userId = -1;
       // if (token) {
-      // console.log('---->', jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJUeXBlIjoiY3VzdG9tZXIiLCJpc0FjdGl2ZSI6dHJ1ZSwiaGFzT3JkZXJlZCI6ZmFsc2UsIl9pZCI6IjVlM2FkMDNiMDNiYTYwMWRkMDg0ZGI3MyIsImZpcnN0TmFtZSI6Im1laGRpIiwibGFzdE5hbWUiOiJjdmJuaiwiLCJlbWFpbCI6Im1mbWVoZGkyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEYzYXd2NU1sQUZCamY0R01Pb0tVMmV1c2UySVdUUFZEdmo4T2U3MWlIZk1WbkYyZ0NCeHg2IiwiY3JlYXRpb25EYXRlIjoiMjAyMC0wMi0wNVQxNDoyNDo1OS4zMzdaIiwiVXBkYXRlZEF0IjoiMjAyMC0wMi0wNVQxNDoyNDo1OS4zMzdaIiwiX192IjowfSwiaWF0IjoxNTgwOTE1Njc2LCJleHAiOjE1ODA5MTY4NzZ9.RUxQ3gmIM8l9SWmy3wB86DnMQv9hwJjsKIUaRsP3grg', secretKey))
       try {
         const data = jwt.verify(token, secretKey);
-        const { firstName, lastName, _id } = data.user;
+        const { firstName, lastName, _id, isActive } = data.user;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
 
         next();
@@ -87,13 +86,13 @@ let verifyRefreshTokens = async (req, res, next) => {
 
         res.set("x-token", newToken);
         res.set("x-refresh-token", newRefreshToken);
-        const { firstName, lastName, _id } = findUser;
+        const { firstName, lastName, _id, isActive } = findUser;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
-        console.log("=======================>", req.user);
         next();
       }
       //}
@@ -121,10 +120,10 @@ const confirmationSocial = async (req, res, next) => {
     const userInfo = jwt.decode(req.body.token);
     if (userInfo.iss === "accounts.google.com") {
       req.userInfo = userInfo;
+      //res.set("x-token", req.body.token);
       next();
     }
   } catch (err) {
-    console.log(err);
     res.status(401).send(invalidToken);
     return;
   }
@@ -159,8 +158,9 @@ const confirmationSocialFacebook = async (req, res, next) => {
         request(options2, (err, resp) => {
           var userInfo = JSON.parse(resp.body);
           userInfo.email = req.body.email;
-          console.log("-facebook-->", userInfo);
+
           req.userInfo = userInfo;
+          res.set("x-token", req.body.token);
           next();
         });
       } else {
@@ -169,7 +169,6 @@ const confirmationSocialFacebook = async (req, res, next) => {
       }
     });
   } catch (err) {
-    console.log(err);
     res.status(401).send(invalidToken);
     return;
   }

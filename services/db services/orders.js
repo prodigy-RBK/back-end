@@ -1,4 +1,4 @@
-const Order = require("../../models/Order");
+const Order = require("../../models/order");
 
 const getAllByUserId = userId => {
   return Order.find({ userId }).populate("products.productId userId");
@@ -8,8 +8,15 @@ const getOneById = (id, product) => {
   return Order.findOne({ _id: id }).populate("products.productId userId");
 };
 
-const createOrder = orderDetails => {
-  let order = new Order(orderDetails);
+const createOrder = (userId, orderDetails) => {
+  let order = new Order({
+    userId,
+    products: orderDetails.products,
+    paymentMethod: orderDetails.paymentMethod,
+    orderPrice: orderDetails.orderPrice,
+    deliveryInfo: orderDetails.deliveryInfo,
+    paymentMethod: orderDetails.deliveryInfo.payment_method
+  });
   return order.save();
 };
 
