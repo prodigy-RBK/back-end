@@ -47,6 +47,10 @@ const getAllByGender = gender => {
   return Product.find({ gender });
 };
 
+const getAllByBrand = brand => {
+  return Product.find({ brand });
+};
+
 const getByPageNumber = page => {
   return Product.paginate({}, { page, limit: 9 });
 };
@@ -120,6 +124,7 @@ module.exports.getCategories = getCategories;
 module.exports.deleteProduct = deleteProduct;
 module.exports.updateRatings = updateRatings;
 module.exports.getAllByGender = getAllByGender;
+module.exports.getAllByBrand = getAllByBrand;
 module.exports.getByPageNumber = getByPageNumber;
 module.exports.numberOfProducts = numberOfProducts;
 module.exports.decreaseQuantity = decreaseQuantity;
