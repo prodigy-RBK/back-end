@@ -9,7 +9,7 @@ router.post("/signUp", (req, res) => {
 });
 
 router.post("/signIn", (req, res) => {
-  brandOperations.signIn(req).then(response => {
+  brandOperations.signIn(req, res).then(response => {
     res.send(response);
   });
 });
