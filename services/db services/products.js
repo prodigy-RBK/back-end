@@ -1,4 +1,5 @@
-const Product = require("../../models/Product");
+const Product = require("../../models/product");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const addProduct = productDetails => {
   const product = new Product(productDetails);
@@ -6,7 +7,12 @@ const addProduct = productDetails => {
 };
 
 const getAll = () => {
-  return Product.find().populate("brand");
+  return Product.find()
+    .populate("brand")
+    .sort({ price: 1 });
+};
+const getProducts = productsId => {
+  return Product.find({ _id: { $in: productsId } });
 };
 
 const getOneById = id => {
@@ -66,13 +72,41 @@ const searchForProducts = (brands, categories, tags, priceRange) => {
         price: { $gte: parseInt(priceRange[0]) }
       }
     ]
-  }).populate("brand");
+  })
+    .populate("brand")
+    .sort({ price: 1 });
+};
+
+const addReview = (productId, review, user) => {
+  return Product.findByIdAndUpdate(
+    { _id: productId },
+    {
+      $push: {
+        reviews: {
+          user: `${user.firstName} ${user.lastName}`,
+          review
+        }
+      }
+    },
+    { useFindAndModify: false, new: true }
+  );
+};
+
+const addReply = (productId, reply) => {
+  return Product.update(
+    { _id: productId, "reviews._id": ObjectId(reply.reviewId) },
+    { $push: { "reviews.$.reply": reply } },
+    { useFindAndModify: false, new: true }
+  );
 };
 
 module.exports.getAll = getAll;
 module.exports.getTags = getTags;
+module.exports.addReply = addReply;
+module.exports.addReview = addReview;
 module.exports.addProduct = addProduct;
 module.exports.getOneById = getOneById;
+module.exports.getProducts = getProducts;
 module.exports.updateProduct = updateProduct;
 module.exports.getCategories = getCategories;
 module.exports.deleteProduct = deleteProduct;

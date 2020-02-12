@@ -9,7 +9,6 @@ const { sendMail } = require("../middleware/mailer");
 require("../loaders/mongoose");
 
 var signUp = async request => {
-  // console.log('request===>', request.body)
   return user
     .createUser(request.body) //request ==> {user details}
     .then(async newUser => {
@@ -37,6 +36,11 @@ const signIn = async (request, res) => {
       let psw = await bcrypt.compare(request.body.password, loginUser.password);
       if (psw) {
         var tokens = await createTokens(loginUser); //tokens is an array of tokens
+        if (!loginUser.isActive) {
+          var token = await createConfirmationTokens(loginUser);
+          // var tokens = await createTokens(newUser);//tokens is an array of tokens
+          sendMail(loginUser.email, token);
+        }
         const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] }, loginUser.isActive);
         res.set("x-token", tokens[0]);
         res.set("x-refresh-token", tokens[1]);
@@ -52,7 +56,7 @@ const confirmation = async email => {
   try {
     return user.UpdateToActive(email);
   } catch (err) {
-    console.log("rrrrr");
+    console.log(err);
   }
 };
 

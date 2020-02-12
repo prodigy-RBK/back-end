@@ -3,16 +3,16 @@ const ordersService = require("../services/db services/orders");
 const orderOperations = require("../operations/orders");
 const { verifyRefreshTokens } = require("../middleware/token");
 
-router.get("/user/:id", verifyRefreshTokens, async (req, res) => {
+router.get("/user", verifyRefreshTokens, async (req, res) => {
   try {
-    let order = await ordersService.getAllByUserId(req.params.id);
+    let order = await ordersService.getAllByUserId(req.user._id);
     res.status(200).json(order);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyRefreshTokens, async (req, res) => {
   try {
     let order = await ordersService.getOneById(req.params.id, req.body);
     res.status(200).json(order);
@@ -21,16 +21,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/order", async (req, res) => {
+router.post("/order", verifyRefreshTokens, async (req, res) => {
   try {
-    let order = await ordersService.createOrder(req.body);
+    let order = await ordersService.createOrder(req.user._id, req.body);
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.put("/:id/products", async (req, res) => {
+router.put("/:id/products", verifyRefreshTokens, async (req, res) => {
   try {
     let order = await ordersService.updateProducts(req.params.id, req.body);
     res.status(201).json(order);
@@ -39,7 +39,7 @@ router.put("/:id/products", async (req, res) => {
   }
 });
 
-router.delete("/:id/products", async (req, res) => {
+router.delete("/:id/products", verifyRefreshTokens, async (req, res) => {
   try {
     let order = await ordersService.deleteProducts(req.params.id, req.body);
     res.status(201).json(order);
