@@ -36,6 +36,11 @@ const signIn = async (request, res) => {
       let psw = await bcrypt.compare(request.body.password, loginUser.password);
       if (psw) {
         var tokens = await createTokens(loginUser); //tokens is an array of tokens
+        if (!loginUser.isActive) {
+          var token = await createConfirmationTokens(loginUser);
+          // var tokens = await createTokens(newUser);//tokens is an array of tokens
+          sendMail(loginUser.email, token);
+        }
         const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] }, loginUser.isActive);
         res.set("x-token", tokens[0]);
         res.set("x-refresh-token", tokens[1]);
