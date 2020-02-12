@@ -20,7 +20,13 @@ const brandSchema = mongoose.Schema({
   creationDate: {
     type: Date,
     default: Date.now
-  }
+  },
+  products: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Product"
+    }
+  ]
 });
 
 module.exports = mongoose.model("Brand", brandSchema);

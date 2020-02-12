@@ -1,4 +1,5 @@
 const productsService = require("../services/db services/products");
+const brandsService = require("../services/db services/brands");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const updateRating = async (id, rating) => {
@@ -19,6 +20,13 @@ const getProducts = productsId => {
   return productsService.getProducts(fixedProductsId);
 };
 
+const addProduct = async (id, productDetails) => {
+  let product = await productsService.addProduct(productDetails);
+  await brandsService.addProduct(id, product._id);
+  return product;
+};
+
+module.exports.addProduct = addProduct;
 module.exports.getProducts = getProducts;
 module.exports.updateRating = updateRating;
 module.exports.searchForProducts = searchForProducts;
