@@ -9,7 +9,6 @@ const { sendMail } = require("../middleware/mailer");
 require("../loaders/mongoose");
 
 var signUp = async request => {
-  // console.log('request===>', request.body)
   return user
     .createUser(request.body) //request ==> {user details}
     .then(async newUser => {
@@ -52,7 +51,7 @@ const confirmation = async email => {
   try {
     return user.UpdateToActive(email);
   } catch (err) {
-    console.log("rrrrr");
+    console.log(err);
   }
 };
 
