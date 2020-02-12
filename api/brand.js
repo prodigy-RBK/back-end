@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const brandOperations = require("../operations/brands");
 const brandService = require("../services/db services/brands");
+const { verifyRefreshTokensBrand } = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
   brandOperations.signUp(req).then(response => {
@@ -23,4 +24,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/verifytoken", verifyRefreshTokensBrand, (req, res) => {
+  res.send({ authed: true, idbrand: req.user._id });
+});
 module.exports = router;
