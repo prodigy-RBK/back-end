@@ -30,13 +30,7 @@ router.get("/eventall", async (req, res) => {
   console.log(result.data.rows);
 });
 
-var data = [
-  ["5e42c03fe912cc19c0dfd2c8", "clicked product", "5e43da488bbf4d22e468ba9f", "3"],
-  ["5e42c096e912cc19c0dfd36b", "clicked product", "5e43da488bbf4d22e468ba9f", "1"],
-  ["5e42c0a6e912cc19c0dfd410", "clicked product", "5e43da488bbf4d22e468ba9f", "1"]
-];
-
-var j = schedule.scheduleJob("40 * * * *", function() {
+var j = schedule.scheduleJob("05 * * * *", function() {
   console.log("The answer to life, the universe, and everything!");
 });
 module.exports = router;

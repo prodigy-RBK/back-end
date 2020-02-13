@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userbehaviorSchema = mongoose.Schema({
-  userid: {
+  id: {
     required: true,
     type: String
   },
