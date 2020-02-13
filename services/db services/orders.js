@@ -1,4 +1,4 @@
-const Order = require("../../models/Order");
+const Order = require("../../models/order");
 
 const getAllByUserId = userId => {
   return Order.find({ userId }).populate("products.productId userId");

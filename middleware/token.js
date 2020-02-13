@@ -2,13 +2,14 @@ const jwt = require("jsonwebtoken");
 const { AuthResponse } = require("../operations/responseModel");
 const { secretKey, secretKey2 } = require("../config/index");
 const user = require("../services/db services/users");
+const brand = require("../services/db services/brands");
+
 const { OAuth2Client } = require("google-auth-library");
 const request = require("request");
 
 let createTokens = async user => {
-  const createToken = jwt.sign({ user }, secretKey, { expiresIn: "1h" });
+  const createToken = jwt.sign({ user }, secretKey, { expiresIn: "60m" });
   const createRefreshToken = jwt.sign({ user }, secretKey2 + user.password, { expiresIn: "7d" });
-
   return Promise.all([createToken, createRefreshToken]);
 };
 
@@ -31,7 +32,7 @@ let verifyRefreshTokens = async (req, res, next) => {
           });
           const payload = ticket.getPayload();
           const findUser = await user.findUser(payload.email);
-          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id };
+          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id, isActive: findUser.isActive };
         }
         await verify();
         next();
@@ -44,11 +45,12 @@ let verifyRefreshTokens = async (req, res, next) => {
       // if (token) {
       try {
         const data = jwt.verify(token, secretKey);
-        const { firstName, lastName, _id } = data.user;
+        const { firstName, lastName, _id, isActive } = data.user;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
 
         next();
@@ -85,11 +87,12 @@ let verifyRefreshTokens = async (req, res, next) => {
 
         res.set("x-token", newToken);
         res.set("x-refresh-token", newRefreshToken);
-        const { firstName, lastName, _id } = findUser;
+        const { firstName, lastName, _id, isActive } = findUser;
         req.user = {
           firstName,
           lastName,
-          _id
+          _id,
+          isActive
         };
         next();
       }
@@ -100,6 +103,72 @@ let verifyRefreshTokens = async (req, res, next) => {
   }
 };
 
+let verifyRefreshTokensBrand = async (req, res, next) => {
+  var refreshToken = req.headers["x-refresh-token"];
+  var token = req.headers["x-token"];
+  // console.log(token);
+  const info = jwt.decode(token);
+
+  if (info) {
+    console.log(info.user.email);
+    let userId = -1;
+
+    try {
+      const data = jwt.verify(token, secretKey);
+      const { firstName, lastName, _id } = data.user;
+      req.user = {
+        firstName,
+        lastName,
+        _id
+      };
+      next();
+    } catch (err) {
+      try {
+        const {
+          user: { _id }
+        } = jwt.decode(refreshToken);
+        userId = _id;
+      } catch (err) {
+        res.status(401).send(invalidToken);
+        return;
+      }
+
+      if (!userId) {
+        res.status(401).send(invalidToken);
+      }
+      const findUser = await brand.findBrandById(userId);
+      if (!findUser) {
+        res.status(401).send(invalidToken);
+        return;
+      }
+
+      const refreshSecret = secretKey2 + findUser.password;
+
+      try {
+        jwt.verify(refreshToken, refreshSecret);
+      } catch (err) {
+        res.status(401).send(invalidToken);
+        return;
+      }
+
+      const [newToken, newRefreshToken] = await createTokens(findUser);
+      console.log(newToken);
+      res.set("x-token", newToken);
+      res.set("x-refresh-token", newRefreshToken);
+      const { firstName, lastName, _id } = findUser;
+      req.user = {
+        firstName,
+        lastName,
+        _id
+      };
+      next();
+    }
+    //}
+  } else {
+    res.status(401).send(invalidToken);
+    return;
+  }
+};
 const confirmation = async (req, res, next) => {
   try {
     const { user } = jwt.verify(req.params.token, secretKey);
@@ -179,6 +248,7 @@ const invalidToken = new AuthResponse("Invalid Token", {});
 //module.exports = verifyToken;
 module.exports.createTokens = createTokens;
 module.exports.verifyRefreshTokens = verifyRefreshTokens;
+module.exports.verifyRefreshTokensBrand = verifyRefreshTokensBrand;
 module.exports.confirmation = confirmation;
 module.exports.createConfirmationTokens = createConfirmationTokens;
 module.exports.confirmationSocial = confirmationSocial;
