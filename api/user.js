@@ -117,7 +117,7 @@ router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
   }
 });
 
-router.post("/forgetPassword", async (req, res) => {
+router.post("/resetPassword", async (req, res) => {
   console.log(req.body.email);
   var result = await userOperations.sendEmailUpdatePassword(req.body.email);
   res.status(200).send(result);
@@ -127,7 +127,7 @@ router.post("/updatePassword/:token", confirmation, (req, res) => {
   userServices
     .updatePassword(req.user._id, req.body.password)
     .then(response => {
-      res.redirect("http://localhost:5000/"); //page of update password
+      if (response) res.status(200).send("success");
     })
     .catch(err => {
       res.status(400).send(err);
