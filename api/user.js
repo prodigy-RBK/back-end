@@ -117,10 +117,10 @@ router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
   }
 });
 
-router.post("/forgetPassword", verifyRefreshTokens, async (req, res) => {
-  var result = await userOperations.sendEmailUpdatePassword(req.user);
-  if (result) res.status(200).send(true);
-  else res.status(400).send(false);
+router.post("/forgetPassword", async (req, res) => {
+  console.log(req.body.email);
+  var result = await userOperations.sendEmailUpdatePassword(req.body.email);
+  res.status(200).send(result);
 });
 
 router.post("/updatePassword/:token", confirmation, (req, res) => {

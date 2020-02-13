@@ -77,9 +77,19 @@ const verificationEmail = async email => {
   return response ? true : false;
 };
 
-const sendEmailUpdatePassword = async user => {
-  var token = await createConfirmationTokens(user);
-  return await sendMailUpdatePasswordUser(user.email, token);
+const sendEmailUpdatePassword = async email => {
+  var userInfo = await user.findUser(email);
+  if (!userInfo) {
+    return wrongEntryEmail;
+  }
+  var token = await createConfirmationTokens(userInfo);
+  var result = await sendMailUpdatePasswordUser(userInfo.email, token);
+  if (result) {
+    const details = new rsponseModel.Details(userInfo.email, {});
+    return new rsponseModel.AuthResponse("success", details);
+  } else {
+    return serverErrorResponse;
+  }
 };
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
@@ -87,6 +97,7 @@ const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", 
 const serverErrorResponse = new rsponseModel.AuthResponse("Server Side Error", {});
 const wrongEntryPssword = new rsponseModel.AuthResponse("wrong password", {});
 const wrongEntryUsername = new rsponseModel.AuthResponse("wrong Username", {});
+const wrongEntryEmail = new rsponseModel.AuthResponse("wrong Email", {});
 
 module.exports.signUp = signUp;
 module.exports.signIn = signIn;
