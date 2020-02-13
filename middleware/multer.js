@@ -7,7 +7,6 @@ let storage = multer.diskStorage({
     cb(null, path.resolve(__dirname, "../uploads/"));
   },
   filename: function(req, file, cb) {
-    console.log(file);
     cb(null, `${ObjectId().toHexString()}.${file.mimetype.substring(6, file.mimetype.length)}`);
   }
 });

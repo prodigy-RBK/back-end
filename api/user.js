@@ -54,7 +54,7 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
 });
 
 router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
-  res.send({ authed: true });
+  res.send({ authed: true, isActive: req.user.isActive, iduser: req.user._id });
 });
 
 router.get("/userprofile", async (req, res) => {});
@@ -95,7 +95,6 @@ router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
 
 router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    console.log(req.user);
     const id = req.user._id;
     const wishlist = await userServices.addToWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);

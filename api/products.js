@@ -6,6 +6,7 @@ const { verifyRefreshTokens } = require("../middleware/token");
 router.get("/allproducts", async (req, res) => {
   try {
     let products = await productsService.getAll();
+
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json(err);
@@ -26,6 +27,16 @@ router.get("/categories/:gender", async (req, res) => {
   try {
     let categories = await productsService.getCategories(gender);
     res.status(200).json(categories);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/brand/:brandId", async (req, res) => {
+  let brandId = req.params.brandId;
+  try {
+    let products = await productsService.getAllByBrand(brandId);
+    res.status(200).json(products);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -100,7 +111,6 @@ router.put("/:id/rating", async (req, res) => {
 
 router.put("/:id/review", verifyRefreshTokens, async (req, res) => {
   try {
-    console.log(req.body);
     let updatedProduct = await productsService.addReview(req.params.id, req.body.review, req.user);
     res.status(200).json(updatedProduct);
   } catch (err) {
