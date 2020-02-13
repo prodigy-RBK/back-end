@@ -32,6 +32,17 @@ router.get("/categories/:gender", async (req, res) => {
   }
 });
 
+router.get("/brand/:brandId", async (req, res) => {
+  let brandId = req.params.brandId;
+  try {
+    let products = await productsService.getAllByBrand(brandId);
+    console.log(products);
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/brands/:gender", async (req, res) => {
   let gender = req.params.gender || "Men";
   try {
