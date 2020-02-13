@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { secretKey, secretKey2 } = require("../config/index");
 const { createTokens, createConfirmationTokens } = require("../middleware/token");
-const { sendMail } = require("../middleware/mailer");
+const { sendMail, sendMailUpdatePasswordUser } = require("../middleware/mailer");
 
 require("../loaders/mongoose");
 
@@ -77,6 +77,10 @@ const verificationEmail = async email => {
   return response ? true : false;
 };
 
+const sendEmailUpdatePassword = async user => {
+  var token = await createConfirmationTokens(user);
+  return await sendMailUpdatePasswordUser(user.email, token);
+};
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
 const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});
@@ -89,3 +93,4 @@ module.exports.signIn = signIn;
 module.exports.confirmation = confirmation;
 module.exports.verificationEmail = verificationEmail;
 module.exports.addUserInfoSocial = addUserInfoSocial;
+module.exports.sendEmailUpdatePassword = sendEmailUpdatePassword;
