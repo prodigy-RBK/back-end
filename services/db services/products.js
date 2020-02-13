@@ -14,7 +14,9 @@ const getAll = () => {
 const getProducts = productsId => {
   return Product.find({ _id: { $in: productsId } });
 };
-
+const getProductsbybehavoir = (gender, category) => {
+  return Product.find({ gender: { $in: gender }, category: { $in: category } });
+};
 const getOneById = id => {
   return Product.findOne({ _id: id }).populate("brand");
 };
@@ -91,6 +93,7 @@ const addReply = (productId, reply) => {
 };
 
 module.exports.getAll = getAll;
+module.exports.getProductsbybehavoir = getProductsbybehavoir;
 module.exports.getTags = getTags;
 module.exports.addReply = addReply;
 module.exports.addReview = addReview;

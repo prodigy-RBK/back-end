@@ -6,7 +6,7 @@ const addUserBehavoir = behavoir => {
 };
 
 const findBehavoirByuserId = userid => {
-  return Userbehavoir.findOne(userid);
+  return Userbehavoir.findOne({ id: userid });
 };
 const UpdateuserBehavoir = userid => {
   return Userbehavoir.findOneAndUpdate({ userid }, {});

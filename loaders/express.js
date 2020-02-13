@@ -9,6 +9,7 @@ const path = require("path");
 const charge = require("../middleware/stripe");
 const analyticsRouter = require("../api/analytics");
 const behavior = require("../api/Labelling");
+const recprods = require("../api/recomendedprods");
 const fashionApi = require("../api/fashion");
 
 module.exports = async app => {
@@ -25,6 +26,7 @@ module.exports = async app => {
   app.use("/api/products", productsRouter);
   app.use("/api/analytics", analyticsRouter);
   app.use("/api/labelling", behavior);
+  app.use("/api/recommendedproducts", recprods);
   app.use("/api/articles", fashionApi);
   app.post("/api/multer", upload.array("myFiles", 12), (req, res) => {
     res.send(req.files);
