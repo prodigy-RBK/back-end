@@ -33,6 +33,8 @@ const signIn = async request => {
       if (psw) {
         var tokens = await createTokens(loginBrand); //tokens is an array of tokens
         const details = new rsponseModel.Details(loginBrand.email, { token: tokens[0], refreshToken: tokens[1] });
+        res.set("x-token", tokens[0]);
+        res.set("x-refresh-token", tokens[1]);
         return new rsponseModel.AuthResponse("success", details);
       } //else: ifpsw===false
       return wrongEntryPssword;

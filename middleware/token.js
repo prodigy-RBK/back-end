@@ -30,7 +30,7 @@ let verifyRefreshTokens = async (req, res, next) => {
             //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJUeXBlIjoiY3VzdG9tZXIiLCJpc0FjdGl2ZSI6ZmFsc2UsImhhc09yZGVyZWQiOmZhbHNlLCJfaWQiOiI1ZTM3MGFiMWI3YmM0ODE0YzAzZmQ3Y2IiLCJmaXJzdE5hbWUiOiJNIiwibGFzdE5hbWUiOiJGIiwiZW1haWwiOiJNRk1FSERJM0BHTUFJTC5DT00iLCJwYXNzd29yZCI6IiQyYSQxMCQ2VExBQzM1dllNdEZvVDlXQS5xcmZPZHR3TldIQjA1VC5VbkZVU21ja1ZBMFBUSzZCTnhzMiIsImNyZWF0aW9uRGF0ZSI6IjIwMjAtMDItMDJUMTc6NDU6MjEuMDYxWiIsIlVwZGF0ZWRBdCI6IjIwMjAtMDItMDJUMTc6NDU6MjEuMDYxWiIsIl9fdiI6MH0sImlhdCI6MTU4MDY2NTU0MCwiZXhwIjoxNTgwNjY1NjAwfQ.7bRGGH6TQpmfZY8wegFmVN--pRHBJXUI1KAegFzC9Yo",
           });
           const payload = ticket.getPayload();
-          const findUser = await user.findUser(payload.email);
+          const findUser = await user.findUser(payload.email); ////****** */
           req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id };
         }
         await verify();
