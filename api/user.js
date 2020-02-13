@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const userOperations = require("../operations/users");
-
+const userServices = require("../services/db services/users");
 const { confirmation, confirmationSocial, confirmationSocialFacebook, verifyRefreshTokens } = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
-  console.log(req.body);
   userOperations.signUp(req).then(response => {
     res.send(response);
   });
@@ -21,10 +20,10 @@ router.get("/confirmation/:token", confirmation, (req, res) => {
   userOperations
     .confirmation(req.user.email)
     .then(response => {
-      //console.log("respnse====<>", response)
       res.redirect("http://localhost:8080/"); //
     })
     .catch(err => {
+      res.status(500).send(err);
       console.log(err);
     });
 });
@@ -48,18 +47,17 @@ router.post("/login/social", confirmationSocial, async (req, res) => {
     //we need to add googleId to user schema
     userOperations.addUserInfoSocial(newUser).then(response => {
       if (response.status) res.send({ status: true });
-      // res.redirect('https://localhost:5000/')
     });
   } else {
     res.send({ status: true });
-    // res.redirect('https://localhost:5000/productDetails')
   }
 });
 
 router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
-  res.send({ authed: true });
+  res.send({ authed: true, isActive: req.user.isActive, iduser: req.user._id });
 });
 
+router.get("/userprofile", async (req, res) => {});
 router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
   var verificationEmail = await userOperations.verificationEmail(req.userInfo.email);
   if (!verificationEmail) {
@@ -77,11 +75,45 @@ router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
       isActive: true
     };
     userOperations.addUserInfoSocial(newUser).then(response => {
-      console.log(response);
       res.send({ status: true });
     });
   } else {
     res.send({ status: true });
   }
 });
+
+router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
+  try {
+    const id = req.user._id;
+    const wishlist = await userServices.getWishlist(id);
+    res.status(200).json({ wishlist: wishlist.wishlist, inWishlist: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
+  try {
+    console.log(req.user);
+    const id = req.user._id;
+    const wishlist = await userServices.addToWishlist(id, req.body.product);
+    res.status(200).json(wishlist.wishlist);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
+  try {
+    const id = req.user._id;
+    const wishlist = await userServices.removeFromWishlist(id, req.body.product);
+    res.status(200).json(wishlist.wishlist);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

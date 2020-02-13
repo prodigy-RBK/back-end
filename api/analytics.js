@@ -1,55 +1,36 @@
-
 const express = require("express");
 const router = express.Router();
-const ga = require('google-analyticsreporting');
-var key = require('../aerobic-orbit-267414-37423e3c90ba.json');
 
+var key = require("../aerobic-orbit-267414-37423e3c90ba.json");
 
+var schedule = require("node-schedule");
 
-const reportRequests = {
-  reportRequests:
-    [
-      {
-        viewId: '210229493',
-        dateRanges:
-          [
-            {
-              endDate: 'yesterday',
-              startDate: '30daysAgo',
-            },
-          ],
-        metrics:
-          [
-            {
-              expression: 'ga:totalEvents',
-            }
+const { google } = require("googleapis");
 
-          ],
-        dimensions:
-          [
-            {
-              name: 'ga:eventCategory',
-            },
-            {
-              name: 'ga:eventAction',
-            },
-            {
-              name: 'ga:eventLabel',
-            },
+const analytics = google.analytics("v3");
+const clientEmail = key.client_email;
+const privateKey = key.private_key;
+const scopes = ["https://www.googleapis.com/auth/analytics.readonly"];
+const viewId = "211325839";
+const jwt = new google.auth.JWT({
+  email: clientEmail,
+  key: privateKey,
+  scopes
+});
 
-          ],
-      },
-    ],
-};
 router.get("/eventall", async (req, res) => {
-  ga.auth(key)
-    .then(
-      ga.query(reportRequests)
-        .then(function (error, results) {
-          var csv = ga.makecsv(error, results);
-          console.log(csv);
-        })
-    );
-})
+  const result = await analytics.data.ga.get({
+    auth: jwt,
+    ids: `ga:${viewId}`,
+    "start-date": "30daysAgo",
+    "end-date": "today",
+    metrics: ["ga:totalEvents"],
+    dimensions: ["ga:eventCategory,ga:eventAction,ga:eventLabel"]
+  });
+  console.log(result.data.rows);
+});
 
-module.exports = router
+var j = schedule.scheduleJob("05 * * * *", function() {
+  console.log("The answer to life, the universe, and everything!");
+});
+module.exports = router;
