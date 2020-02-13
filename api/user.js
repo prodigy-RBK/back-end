@@ -124,15 +124,19 @@ router.post("/forgetPassword", async (req, res) => {
 });
 
 router.post("/updatePassword/:token", confirmation, (req, res) => {
-  userOperations
-    .updatePassword(req.user._id)
+  userServices
+    .updatePassword(req.user._id, req.body.password)
     .then(response => {
-      res.redirect("http://localhost:8080/"); //page of update password
+      res.redirect("http://localhost:5000/"); //page of update password
     })
     .catch(err => {
       res.status(400).send(err);
       console.log(err);
     });
+});
+
+router.post("/verifyEmailPassword/:token", confirmation, (req, res) => {
+  res.send(true);
 });
 
 module.exports = router;

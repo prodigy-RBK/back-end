@@ -91,6 +91,10 @@ const sendEmailUpdatePassword = async email => {
     return serverErrorResponse;
   }
 };
+
+const updatePassword = async (id, newpassword) => {
+  user.updatePassword(id, newpassword).then(() => {});
+};
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
 const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});

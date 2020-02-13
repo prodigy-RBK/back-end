@@ -28,7 +28,7 @@ var sendMailUpdatePasswordUser = async function(userMail, token) {
     from: "mehditestmailer@gmail.com",
     to: userMail,
     subject: "Update password",
-    text: `http://localhost:3000/api/user/updatePassword/${token}`
+    text: `https://localhost:5000/forgetPassword/${token}`
   };
   return transporter.sendMail(mailOptions).then((res, err) => {
     if (err) {
