@@ -106,9 +106,11 @@ let verifyRefreshTokens = async (req, res, next) => {
 let verifyRefreshTokensBrand = async (req, res, next) => {
   var refreshToken = req.headers["x-refresh-token"];
   var token = req.headers["x-token"];
-
+  // console.log(token);
   const info = jwt.decode(token);
+
   if (info) {
+    console.log(info.user.email);
     let userId = -1;
 
     try {
@@ -162,6 +164,9 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
       next();
     }
     //}
+  } else {
+    res.status(401).send(invalidToken);
+    return;
   }
 };
 const confirmation = async (req, res, next) => {
