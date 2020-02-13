@@ -14,7 +14,7 @@ var signUp = async request => {
     .then(async newUser => {
       var token = await createConfirmationTokens(newUser);
       // var tokens = await createTokens(newUser);//tokens is an array of tokens
-      var emai = await sendMail(newUser.email, token);
+      await sendMail(newUser.email, token);
 
       const details = new rsponseModel.Details(newUser.email, {});
 

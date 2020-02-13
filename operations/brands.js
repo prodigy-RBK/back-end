@@ -10,10 +10,9 @@ var signUp = async request => {
   return brand
     .createBrand(request.body) //request ==> {Brand details}
     .then(async newBrand => {
-      //const expire = "20m";
-      //const token = jwt.sign({ newBrand }, secretKey, { expiresIn: expire });
-      var tokens = await createTokens(newBrand); //tokens is an array of tokens
-      const details = new rsponseModel.Details(newBrand.email, { token: tokens[0], refreshToken: tokens[1] });
+      // var tokens = await createTokens(newBrand); //tokens is an array of tokens
+      // await sendMail(newBrand.email, token);
+      const details = new rsponseModel.Details(newBrand.email, {});
       return new rsponseModel.AuthResponse("success", details);
     })
     .catch(err => {
@@ -24,7 +23,7 @@ var signUp = async request => {
     });
 };
 /*************************************************************************** */
-const signIn = async request => {
+const signIn = async (request, res) => {
   // return object if existing user , false if psw or username are wrong
   return brand.findBrand(request.body.email).then(async loginBrand => {
     if (loginBrand) {
@@ -33,6 +32,8 @@ const signIn = async request => {
       if (psw) {
         var tokens = await createTokens(loginBrand); //tokens is an array of tokens
         const details = new rsponseModel.Details(loginBrand.email, { token: tokens[0], refreshToken: tokens[1] });
+        res.set("x-token", tokens[0]);
+        res.set("x-refresh-token", tokens[1]);
         return new rsponseModel.AuthResponse("success", details);
       } //else: ifpsw===false
       return wrongEntryPssword;
@@ -42,7 +43,7 @@ const signIn = async request => {
 };
 
 //response Models
-const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});
+const userExistsResponse = new rsponseModel.AuthResponse("Brand Already Exists", {});
 const serverErrorResponse = new rsponseModel.AuthResponse("Server Side Error", {});
 const wrongEntryPssword = new rsponseModel.AuthResponse("wrong password", {});
 const wrongEntryUsername = new rsponseModel.AuthResponse("wrong Username", {});
