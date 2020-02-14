@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const userbehaviorSchema = mongoose.Schema({
   id: {
+    unique: true,
     required: true,
     type: String
   },
   gender: {
-    unique: true,
     required: true,
     type: Object
   },

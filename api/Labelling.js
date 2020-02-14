@@ -2,11 +2,6 @@ const productsService = require("../services/db services/products");
 const behavoirService = require("../services/db services/userbehavoir");
 const express = require("express");
 const router = express.Router();
-var data = [
-  ["5e42c03fe912cc19c0dfd2c8", "clicked product", "5e43da488bbf4d22e468ba9f", "3"],
-  ["5e42c096e912cc19c0dfd36b", "clicked product", "5e43da488bbf4d22e468ba9f", "1"],
-  ["5e42c0a6e912cc19c0dfd410", "clicked product", "5e43da488bbf4d22e468ba9f", "1"]
-];
 
 function arraytoObj(arrayy) {
   var obj = {};
@@ -77,7 +72,6 @@ function lable(userprod, prods) {
     }
   }
 
-  //console.log(objproduser);
   let products = prods;
 
   var array = [];
@@ -98,16 +92,51 @@ function lable(userprod, prods) {
   }
   return farray;
 }
-router.get("/behavoir", async (req, res) => {
+function updatebehavoir(objindb, objinres) {
+  for (var k in objinres) {
+    if (objindb[k] === undefined) {
+      objindb[k] = objinres[k];
+    } else {
+      objindb[k] = parseInt(objinres[k]) + parseInt(objindb[k]);
+    }
+  }
+  return objindb;
+}
+
+async function update(data) {
   let pro = await productsService.getAll();
   let result = await lable(data, pro);
-  console.log(result);
+
   for (var i = 0; i < result.length; i++) {
     try {
-      behavoirService.addUserBehavoir(result[i]);
+      let user = await behavoirService.findBehavoirByuserId(result[i].id);
+      if (user === null) {
+        try {
+          behavoirService.addUserBehavoir(result[i]);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        var Userb = function(id) {
+          this.id = id;
+          (this.gender = {}), (this.category = {}), (this.brand = {});
+        };
+        var userb = new Userb(result[i].id);
+
+        userb.gender = updatebehavoir(user.gender, result[i].gender);
+        userb.category = updatebehavoir(user.category, result[i].category);
+        userb.brand = updatebehavoir(user.brand, result[i].brand);
+
+        try {
+          let update = await behavoirService.updatebehavoir(user._id, userb);
+        } catch (err) {
+          console.log(err.message);
+        }
+      }
     } catch (err) {
       console.log(err);
     }
   }
-});
-module.exports = router;
+}
+
+module.exports.update = update;

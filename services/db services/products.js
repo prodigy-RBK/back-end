@@ -14,8 +14,11 @@ const getAll = () => {
 const getProducts = productsId => {
   return Product.find({ _id: { $in: productsId } });
 };
-const getProductsbybehavoir = (gender, category) => {
-  return Product.find({ gender: { $in: gender }, category: { $in: category } });
+const getProductsbybehavoir = (gender, category, brand) => {
+  return Product.find({
+    gender: { $in: gender },
+    category: { $in: category }
+  }).populate("brand", { name: brand }); //.find({ gender: { $in: gender }, category: { $in: category }, brand: { $in: brand } });
 };
 const getOneById = id => {
   return Product.findOne({ _id: id }).populate("brand");
