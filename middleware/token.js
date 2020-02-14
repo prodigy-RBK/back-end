@@ -14,7 +14,7 @@ let createTokens = async user => {
 };
 
 let createConfirmationTokens = async user => {
-  return jwt.sign({ user }, secretKey, { expiresIn: "24h" });
+  return jwt.sign({ user }, secretKey, { expiresIn: "1m" });
 };
 
 let verifyRefreshTokens = async (req, res, next) => {
