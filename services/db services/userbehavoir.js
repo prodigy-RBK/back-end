@@ -8,10 +8,11 @@ const addUserBehavoir = behavoir => {
 const findBehavoirByuserId = userid => {
   return Userbehavoir.findOne({ id: userid });
 };
-const UpdateuserBehavoir = userid => {
-  return Userbehavoir.findOneAndUpdate({ userid }, {});
-};
 
+const updatebehavoir = (id, userb) => {
+  console.log(id, userb, Userbehavoir);
+  return Userbehavoir.findByIdAndUpdate(id, { $set: { gender: userb.gender, category: userb.category, brand: userb.brand } });
+};
+module.exports.updatebehavoir = updatebehavoir;
 module.exports.addUserBehavoir = addUserBehavoir;
 module.exports.findBehavoirByuserId = findBehavoirByuserId;
-module.exports.UpdateuserBehavoir = UpdateuserBehavoir;

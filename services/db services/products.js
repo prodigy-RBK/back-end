@@ -14,8 +14,11 @@ const getAll = () => {
 const getProducts = productsId => {
   return Product.find({ _id: { $in: productsId } });
 };
-const getProductsbybehavoir = (gender, category) => {
-  return Product.find({ gender: { $in: gender }, category: { $in: category } });
+const getProductsbybehavoir = (gender, category, brand) => {
+  return Product.find({
+    gender: { $in: gender },
+    category: { $in: category }
+  }).populate("brand", { name: brand }); //.find({ gender: { $in: gender }, category: { $in: category }, brand: { $in: brand } });
 };
 const getOneById = id => {
   return Product.findOne({ _id: id }).populate("brand");
@@ -114,6 +117,14 @@ const decreaseQuantity = (_id, size, color, qte) => {
   );
 };
 
+const changeQuantity = (_id, size, color, qte) => {
+  return Product.updateOne(
+    { _id, $and: [{ "availability.size": size }, { "availability.color": color }] },
+    { "availability.$.quantity": qte },
+    { useFindAndModify: false, new: true }
+  );
+};
+
 module.exports.getAll = getAll;
 module.exports.getProductsbybehavoir = getProductsbybehavoir;
 module.exports.getTags = getTags;
@@ -126,8 +137,9 @@ module.exports.updateProduct = updateProduct;
 module.exports.getCategories = getCategories;
 module.exports.deleteProduct = deleteProduct;
 module.exports.updateRatings = updateRatings;
-module.exports.getAllByGender = getAllByGender;
 module.exports.getAllByBrand = getAllByBrand;
+module.exports.changeQuantity = changeQuantity;
+module.exports.getAllByGender = getAllByGender;
 module.exports.getByPageNumber = getByPageNumber;
 module.exports.numberOfProducts = numberOfProducts;
 module.exports.decreaseQuantity = decreaseQuantity;

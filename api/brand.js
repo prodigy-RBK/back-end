@@ -2,8 +2,9 @@ const router = require("express").Router();
 const brandOperations = require("../operations/brands");
 const brandService = require("../services/db services/brands");
 const { verifyRefreshTokensBrand } = require("../middleware/token");
+const upload = require("../middleware/multer");
 
-router.post("/signUp", (req, res) => {
+router.post("/signUp", upload.array("image", 12), (req, res) => {
   brandOperations.signUp(req).then(response => {
     res.send(response);
   });
@@ -18,6 +19,15 @@ router.post("/signIn", (req, res) => {
 router.get("/", async (req, res) => {
   try {
     let brands = await brandService.getAllBrands();
+    res.status(200).json(brands);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/one", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let brands = await brandService.findBrandById(req.user._id);
     res.status(200).json(brands);
   } catch (err) {
     res.status(500).json(err);
