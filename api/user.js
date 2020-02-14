@@ -20,7 +20,7 @@ router.get("/confirmation/:token", confirmation, (req, res) => {
   userOperations
     .confirmation(req.user.email)
     .then(response => {
-      res.redirect("http://localhost:8080/"); //
+      res.redirect("https://prodigy-store.onrender.com"); //
     })
     .catch(err => {
       res.status(500).send(err);
