@@ -14,7 +14,7 @@ function buildquery(object) {
   return mostkey;
 }
 router.get("/getrecommprods", async (req, res) => {
-  let userbehavoir = await behavoirService.findBehavoirByuserId(req.query.userid + "1");
+  let userbehavoir = await behavoirService.findBehavoirByuserId(req.query.userid);
 
   if (userbehavoir !== null) {
     let gender = buildquery(userbehavoir.gender);
@@ -23,16 +23,9 @@ router.get("/getrecommprods", async (req, res) => {
 
     let listofrecomendation = await productsService.getProductsbybehavoir(gender, category, brand);
 
-    listofrecomendation.sort(x => {
-      if (x["brand"]["name"] === brand) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
-
     res.send(listofrecomendation);
+  } else {
+    res.send("noid");
   }
-  res.send("noid");
 });
 module.exports = router;
