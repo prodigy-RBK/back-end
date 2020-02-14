@@ -24,7 +24,7 @@ module.exports = async app => {
   app.use("/api/products", productsRouter);
   app.use("/api/analytics", analyticsRouter);
   app.use("/api/articles", fashionApi);
-  app.post("/api/multer", upload.array("myFiles", 12), (req, res) => {
+  app.post("/api/multer", upload.array("image", 12), (req, res) => {
     res.send(req.files);
   });
   app.get("/uploads/:id", (req, res) => {
