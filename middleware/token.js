@@ -14,7 +14,7 @@ let createTokens = async user => {
 };
 
 let createConfirmationTokens = async user => {
-  return jwt.sign({ user }, secretKey, { expiresIn: "24h" });
+  return jwt.sign({ user }, secretKey, { expiresIn: "1m" });
 };
 
 let verifyRefreshTokens = async (req, res, next) => {
@@ -32,7 +32,7 @@ let verifyRefreshTokens = async (req, res, next) => {
           });
           const payload = ticket.getPayload();
           const findUser = await user.findUser(payload.email);
-          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id, isActive: findUser.isActive };
+          req.user = { firstName: payload.given_name, lastName: payload.family_name, _id: findUser._id, isActive: findUser.isActive, email: findUser.email };
         }
         await verify();
         next();
@@ -45,12 +45,13 @@ let verifyRefreshTokens = async (req, res, next) => {
       // if (token) {
       try {
         const data = jwt.verify(token, secretKey);
-        const { firstName, lastName, _id, isActive } = data.user;
+        const { firstName, lastName, _id, isActive, email } = data.user;
         req.user = {
           firstName,
           lastName,
           _id,
-          isActive
+          isActive,
+          email
         };
 
         next();
@@ -87,12 +88,13 @@ let verifyRefreshTokens = async (req, res, next) => {
 
         res.set("x-token", newToken);
         res.set("x-refresh-token", newRefreshToken);
-        const { firstName, lastName, _id, isActive } = findUser;
+        const { firstName, lastName, _id, isActive, email } = findUser;
         req.user = {
           firstName,
           lastName,
           _id,
-          isActive
+          isActive,
+          email
         };
         next();
       }
@@ -113,11 +115,12 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
 
     try {
       const data = jwt.verify(token, secretKey);
-      const { firstName, lastName, _id } = data.user;
+      const { firstName, lastName, _id, email } = data.user;
       req.user = {
         firstName,
         lastName,
-        _id
+        _id,
+        email
       };
       next();
     } catch (err) {
@@ -167,6 +170,7 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
     return;
   }
 };
+
 const confirmation = async (req, res, next) => {
   try {
     const { user } = jwt.verify(req.params.token, secretKey);
@@ -178,6 +182,18 @@ const confirmation = async (req, res, next) => {
     return;
   }
 };
+
+// const confirmationUpdatePassword = async (req, res, next) => {
+//   try {
+//     const { user } = jwt.verify(req.params.token, secretKey);
+//     req.user = user;
+//     next();
+//     // var update = user.UpdateToActive(resp.user.email)
+//   } catch (err) {
+//     res.status(401).send(invalidToken);
+//     return;
+//   }
+// };
 
 const confirmationSocial = async (req, res, next) => {
   try {

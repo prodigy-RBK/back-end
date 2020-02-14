@@ -11,7 +11,7 @@ const addBrand = (brandDetails, image) => {
 };
 
 const getAllBrands = () => {
-  return Brand.find();
+  return Brand.find().populate("products");
 };
 
 const createBrand = async (brandDetails, image) => {
@@ -32,7 +32,7 @@ const findBrand = email => {
 };
 
 const findBrandById = id => {
-  return Brand.findById(id);
+  return Brand.findById(id).populate("products");
 };
 
 const UpdateDate = () => {

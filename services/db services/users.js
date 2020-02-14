@@ -29,6 +29,18 @@ const UpdateToActive = async email => {
     }
   );
 };
+const updatePassword = async (_id, newPassword) => {
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+  return User.findOneAndUpdate(
+    { _id },
+    { password: hashedPassword },
+    {
+      new: true,
+      useFindAndModify: false
+    }
+  );
+};
 
 const UpdateDate = () => {
   return User.findOneAndUpdate({ email }, { UpdatedAt: Date.now });
@@ -54,3 +66,4 @@ module.exports.findUserById = findUserById;
 module.exports.addToWishlist = addToWishlist;
 module.exports.UpdateToActive = UpdateToActive;
 module.exports.removeFromWishlist = removeFromWishlist;
+module.exports.updatePassword = updatePassword;

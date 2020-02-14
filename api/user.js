@@ -58,6 +58,7 @@ router.get("/verifytoken", verifyRefreshTokens, (req, res) => {
 });
 
 router.get("/userprofile", async (req, res) => {});
+
 router.post("/login/socialF", confirmationSocialFacebook, async (req, res) => {
   var verificationEmail = await userOperations.verificationEmail(req.userInfo.email);
   if (!verificationEmail) {
@@ -113,6 +114,28 @@ router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
     console.log(err);
     res.status(500).json(err);
   }
+});
+
+router.post("/resetPassword", async (req, res) => {
+  console.log(req.body.email);
+  var result = await userOperations.sendEmailUpdatePassword(req.body.email);
+  res.status(200).send(result);
+});
+
+router.post("/updatePassword/:token", confirmation, (req, res) => {
+  userServices
+    .updatePassword(req.user._id, req.body.password)
+    .then(response => {
+      if (response) res.status(200).send("success");
+    })
+    .catch(err => {
+      res.status(400).send(err);
+      console.log(err);
+    });
+});
+
+router.post("/verifyEmailPassword/:token", confirmation, (req, res) => {
+  res.send(true);
 });
 
 module.exports = router;
