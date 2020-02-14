@@ -2,12 +2,15 @@ const brand = require("../services/db services/brands");
 const rsponseModel = require("./responseModel");
 const bcrypt = require("bcryptjs");
 const { createTokens } = require("../middleware/token");
+const cloudinary = require("cloudinary").v2;
+const path = require("path");
 
 require("../loaders/mongoose");
 
 //****we need to decide if brand can do signup or only the admin can add new barnd   */
 var signUp = async request => {
-  const image = `${request.headers.host}/uploads/${request.files[0].filename}`;
+  const pendingImage = await cloudinary.uploader.upload(path.resolve(__dirname, "../uploads/", request.files[0].filename));
+  const image = pendingImage.secure_url;
   return brand
     .createBrand(request.body, image) //request ==> {Brand details}
     .then(async newBrand => {

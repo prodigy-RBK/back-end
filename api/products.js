@@ -2,6 +2,8 @@ const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
 const { verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
+const upload = require("../middleware/multer");
+const cloudinary = require("cloudinary").v2;
 
 router.get("/allproducts", async (req, res) => {
   try {
@@ -89,10 +91,11 @@ router.get("/gender/:id", async (req, res) => {
   }
 });
 
-router.post("/product", async (req, res) => {
+router.post("/product", upload.array("images", 12), verifyRefreshTokensBrand, async (req, res) => {
   try {
-    let product = await productsService.addProduct(req.body);
-    res.status(201).json(product);
+    console.log(req.user._id);
+    let product = await productsOperation.addProduct(req.user._id, req.body, req.files);
+    res.status(201).json("product");
   } catch (err) {
     res.status(500).json(err);
   }
