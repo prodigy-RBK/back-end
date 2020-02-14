@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { secretKey, secretKey2 } = require("../config/index");
 const { createTokens, createConfirmationTokens } = require("../middleware/token");
-const { sendMail } = require("../middleware/mailer");
+const { sendMail, sendMailUpdatePasswordUser } = require("../middleware/mailer");
 
 require("../loaders/mongoose");
 
@@ -14,7 +14,7 @@ var signUp = async request => {
     .then(async newUser => {
       var token = await createConfirmationTokens(newUser);
       // var tokens = await createTokens(newUser);//tokens is an array of tokens
-      var emai = await sendMail(newUser.email, token);
+      await sendMail(newUser.email, token);
 
       const details = new rsponseModel.Details(newUser.email, {});
 
@@ -36,6 +36,11 @@ const signIn = async (request, res) => {
       let psw = await bcrypt.compare(request.body.password, loginUser.password);
       if (psw) {
         var tokens = await createTokens(loginUser); //tokens is an array of tokens
+        if (!loginUser.isActive) {
+          var token = await createConfirmationTokens(loginUser);
+          // var tokens = await createTokens(newUser);//tokens is an array of tokens
+          sendMail(loginUser.email, token);
+        }
         const details = new rsponseModel.Details(loginUser.email, { token: tokens[0], refreshToken: tokens[1] }, loginUser.isActive);
         res.set("x-token", tokens[0]);
         res.set("x-refresh-token", tokens[1]);
@@ -72,15 +77,32 @@ const verificationEmail = async email => {
   return response ? true : false;
 };
 
+const sendEmailUpdatePassword = async email => {
+  var userInfo = await user.findUser(email);
+  if (!userInfo) {
+    return wrongEntryEmail;
+  }
+  var token = await createConfirmationTokens(userInfo);
+  var result = await sendMailUpdatePasswordUser(userInfo.email, token);
+  if (result) {
+    const details = new rsponseModel.Details(userInfo.email, {});
+    return new rsponseModel.AuthResponse("success", details);
+  } else {
+    return serverErrorResponse;
+  }
+};
+
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
 const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});
 const serverErrorResponse = new rsponseModel.AuthResponse("Server Side Error", {});
 const wrongEntryPssword = new rsponseModel.AuthResponse("wrong password", {});
 const wrongEntryUsername = new rsponseModel.AuthResponse("wrong Username", {});
+const wrongEntryEmail = new rsponseModel.AuthResponse("wrong Email", {});
 
 module.exports.signUp = signUp;
 module.exports.signIn = signIn;
 module.exports.confirmation = confirmation;
 module.exports.verificationEmail = verificationEmail;
 module.exports.addUserInfoSocial = addUserInfoSocial;
+module.exports.sendEmailUpdatePassword = sendEmailUpdatePassword;

@@ -1,6 +1,8 @@
 const productsService = require("../services/db services/products");
 const brandsService = require("../services/db services/brands");
 const ObjectId = require("mongoose").Types.ObjectId;
+const cloudinary = require("cloudinary").v2;
+const path = require("path");
 
 const updateRating = async (id, rating) => {
   let product = await productsService.getOneById(id);
@@ -20,7 +22,14 @@ const getProducts = productsId => {
   return productsService.getProducts(fixedProductsId);
 };
 
-const addProduct = async (id, productDetails) => {
+const addProduct = async (id, productDetails, originalImages) => {
+  const pendingImages = await originalImages.map(async image => {
+    return await cloudinary.uploader.upload(path.resolve(__dirname, "../uploads/", image.filename));
+  });
+  const images = await Promise.all(pendingImages);
+  const finalImages = images.map(image => image.secure_url);
+  productDetails.images = finalImages;
+  productDetails.brand = id;
   let product = await productsService.addProduct(productDetails);
   await brandsService.addProduct(id, product._id);
   return product;
