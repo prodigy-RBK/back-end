@@ -1,8 +1,12 @@
 const Brand = require("../../models/brand");
 const bcrypt = require("bcryptjs");
 
-const addBrand = brandDetails => {
-  const brand = new Brand(brandDetails);
+const addBrand = (brandDetails, image) => {
+  const brand = new Brand({
+    name: brandDetails.name,
+    email: brandDetails.email,
+    image
+  });
   return brand.save();
 };
 
@@ -10,12 +14,16 @@ const getAllBrands = () => {
   return Brand.find().populate("products");
 };
 
-const createBrand = async brand => {
+const createBrand = async (brandDetails, image) => {
   //Brand is an  object contain all necessary data :firstname,password..
   const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(brand.password, salt);
-  brand.password = hashedPassword;
-  let newBrand = new Brand(brand);
+  const hashedPassword = await bcrypt.hash(brandDetails.password, salt);
+  let newBrand = new Brand({
+    name: brandDetails.name,
+    email: brandDetails.email,
+    password: hashedPassword,
+    image
+  });
   return newBrand.save();
 };
 

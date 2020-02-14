@@ -96,7 +96,6 @@ router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
 
 router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
   try {
-    console.log(req.user);
     const id = req.user._id;
     const wishlist = await userServices.addToWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
