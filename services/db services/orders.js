@@ -69,7 +69,7 @@ const getBestSales = () => {
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
-    .group({ _id: "$value._id", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .group({ _id: "$value", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
     .sort({ qte: -1 });
 };
 
