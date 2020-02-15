@@ -13,11 +13,43 @@ router.get("/user", verifyRefreshTokens, async (req, res) => {
   }
 });
 
-router.get("/:id", verifyRefreshTokens, async (req, res) => {
+router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
   try {
-    let order = await ordersService.getOneById(req.params.id, req.body);
-    res.status(200).json(order);
+    let revenue = await ordersService.getAdminRevenue();
+    res.status(200).json(revenue[0].amount);
   } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
+    console.log(revenue);
+    res.status(200).json(revenue[0].amount);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/numberOfOrders", async (req, res) => {
+  try {
+    let revenue = await ordersService.numberOfOrders();
+    res.status(200).json(revenue);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.get("/bestSales", async (req, res) => {
+  try {
+    let products = await ordersService.getBestSales();
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
+
     res.status(500).json(err);
   }
 });
@@ -49,38 +81,52 @@ router.delete("/:id/products", verifyRefreshTokens, async (req, res) => {
     res.status(500).json(err);
   }
 });
-//****************************Dashboard********************* */
+
 router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getAdminRevenue();
     res.status(200).json(revenue[0].amount);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
+  console.log(req.user);
   try {
-    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.body.id));
+    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
     res.status(200).send(revenue);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get("/nuberOfOrders", async (req, res) => {
+router.get("/numberOfOrders", async (req, res) => {
   try {
     let revenue = await ordersService.numberOfOrders();
     res.status(200).json(revenue);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
 router.get("/bestSales", async (req, res) => {
   try {
-    let products = await orderOperations.bestSales();
+    let products = await ordersService.bestSales();
     res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json(err);
+  }
+});
+
+router.get("/:id", verifyRefreshTokens, async (req, res) => {
+  try {
+    let order = await ordersService.getOneById(req.params.id, req.body);
+    res.status(200).json(order);
   } catch (err) {
     res.status(500).json(err);
   }

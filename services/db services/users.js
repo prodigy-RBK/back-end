@@ -59,14 +59,14 @@ const removeFromWishlist = (id, product) => {
 };
 
 //****************************Dashboard********************* */
-const numberOfUser = async () => {
-  return await User.count({});
+const numberOfUser = () => {
+  return User.countDocuments({});
 };
 
-const numberOfNewUser = async nbOfDays => {
+const numberOfNewUser = nbOfDays => {
   var date = new Date();
   date.setDate(date.getDate() - nbOfDays);
-  return await User.count({ creationDate: { $gte: date } });
+  return User.countDocuments({ creationDate: { $gte: date } });
 };
 
 module.exports.findUser = findUser;

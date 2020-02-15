@@ -43,6 +43,11 @@ const addProduct = (id, productId) => {
   return Brand.findOneAndUpdate({ _id: id }, { $push: { products: productId } }, { useFindAndModify: false, new: true });
 };
 
+//****************************Dashboard********************* */
+const numberOfBrands = async () => {
+  return await Brand.countDocuments({});
+};
+
 module.exports.addBrand = addBrand;
 module.exports.findBrand = findBrand;
 module.exports.addProduct = addProduct;
@@ -50,3 +55,4 @@ module.exports.UpdateDate = UpdateDate;
 module.exports.createBrand = createBrand;
 module.exports.getAllBrands = getAllBrands;
 module.exports.findBrandById = findBrandById;
+module.exports.numberOfBrands = numberOfBrands;
