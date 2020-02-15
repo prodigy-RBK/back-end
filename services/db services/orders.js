@@ -61,7 +61,7 @@ const getRevenuebyBrand = idBrand => {
 };
 
 const numberOfOrders = () => {
-  return Order.count({});
+  return Order.countDocuments({});
 };
 
 const getBestSales = () => {

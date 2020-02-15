@@ -132,18 +132,18 @@ router.post("/verifyEmailPassword/:token", confirmation, (req, res) => {
   res.send(true);
 });
 
-router.get("/numberOfUser", verifyRefreshTokensBrand, (req, res) => {
+router.get("/numberOfUser", verifyRefreshTokensBrand, async (req, res) => {
   try {
-    const numberOfUser = userServices.numberOfUser();
+    const numberOfUser = await userServices.numberOfUser();
     res.status(200).json(numberOfUser);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-router.get("/numberOfNewUser/:nbrOfDays", verifyRefreshTokensBrand, (req, res) => {
+router.get("/numberOfNewUser/:nbrOfDays", verifyRefreshTokensBrand, async (req, res) => {
   try {
-    const numberOfUser = userServices.numberOfNewUser(req.params.nbrOfDays);
+    const numberOfUser = await userServices.numberOfNewUser(req.params.nbrOfDays);
     res.status(200).json(numberOfUser);
   } catch (err) {
     res.status(500).send(err);
