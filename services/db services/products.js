@@ -126,7 +126,7 @@ const changeQuantity = (_id, size, color, qte) => {
 };
 //****************************Dashboard********************* */
 
-const getTopRating = nbofproduct => {
+const getTopRating = (nbofproduct = 10) => {
   return Product.find()
     .sort({ rating: -1 })
     .limit(nbofproduct);
