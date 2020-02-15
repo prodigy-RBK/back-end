@@ -69,9 +69,3 @@ module.exports.updateProducts = updateProducts;
 module.exports.getAllByUserId = getAllByUserId;
 module.exports.getAdminRevenue = getAdminRevenue;
 module.exports.getRevenuebyBrand = getRevenuebyBrand;
-
-//test
-var t = this.getRevenuebyBrand(ObjectId("5e42bdda87bfd04a506b6a02"));
-t.then(r => {
-  //console.log(r);
-});
