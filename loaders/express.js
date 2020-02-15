@@ -18,7 +18,7 @@ module.exports = async app => {
       exposedHeaders: ["Content-Length", "x-token", "x-refresh-token"]
     })
   );
-  app.use(cors());
+  // app.use(cors());
   app.use(express.json());
   app.use("/api/user", user);
   app.use("/api/brand", brand);
