@@ -1,4 +1,6 @@
 const Order = require("../../models/order");
+const Product = require("../../models/product");
+const ObjectId = require("mongodb").ObjectId;
 
 const getAllByUserId = userId => {
   return Order.find({ userId }).populate("products.productId userId");
@@ -44,9 +46,39 @@ const deleteProducts = (id, product) => {
   return Order.findByIdAndUpdate({ _id: id }, { $pull: { products: product } }, { useFindAndModify: false, new: true }).populate("products.productId userId");
 };
 
+//****************************Dashboard********************* */
+const getAdminRevenue = () => {
+  return Order.aggregate().group({ _id: null, amount: { $sum: "$orderPrice" } });
+};
+
+const getRevenuebyBrand = idBrand => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .match({ "value.brand": idBrand })
+    .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+};
+
+const numberOfOrders = () => {
+  return Order.count({});
+};
+
+const getBestSales = () => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+};
+/************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
 module.exports.addProducts = addProducts;
 module.exports.deleteProducts = deleteProducts;
 module.exports.updateProducts = updateProducts;
 module.exports.getAllByUserId = getAllByUserId;
+module.exports.getAdminRevenue = getAdminRevenue;
+module.exports.getRevenuebyBrand = getRevenuebyBrand;
+module.exports.numberOfOrders = numberOfOrders;
+module.exports.getBestSales = getBestSales;

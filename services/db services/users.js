@@ -58,12 +58,25 @@ const removeFromWishlist = (id, product) => {
   return User.findByIdAndUpdate({ _id: id }, { $pull: { wishlist: ObjectId(product) } }, { useFindAndModify: false, new: true });
 };
 
+//****************************Dashboard********************* */
+const numberOfUser = async () => {
+  return await User.count({});
+};
+
+const numberOfNewUser = async nbOfDays => {
+  var date = new Date();
+  date.setDate(date.getDate() - nbOfDays);
+  return await User.count({ creationDate: { $gte: date } });
+};
+
 module.exports.findUser = findUser;
 module.exports.UpdateDate = UpdateDate;
 module.exports.createUser = createUser;
 module.exports.getWishlist = getWishlist;
+module.exports.numberOfUser = numberOfUser;
 module.exports.findUserById = findUserById;
 module.exports.addToWishlist = addToWishlist;
 module.exports.UpdateToActive = UpdateToActive;
-module.exports.removeFromWishlist = removeFromWishlist;
 module.exports.updatePassword = updatePassword;
+module.exports.numberOfNewUser = numberOfNewUser;
+module.exports.removeFromWishlist = removeFromWishlist;

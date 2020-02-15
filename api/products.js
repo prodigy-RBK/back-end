@@ -93,7 +93,6 @@ router.get("/gender/:id", async (req, res) => {
 
 router.post("/product", upload.array("images", 12), verifyRefreshTokensBrand, async (req, res) => {
   try {
-    console.log(req.user._id);
     let product = await productsOperation.addProduct(req.user._id, req.body, req.files);
     res.status(201).json("product");
   } catch (err) {
