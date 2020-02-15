@@ -14,7 +14,7 @@ var signUp = async request => {
     .then(async newUser => {
       var token = await createConfirmationTokens(newUser);
       // var tokens = await createTokens(newUser);//tokens is an array of tokens
-      await sendMail(newUser.email, token);
+      await sendMail(newUser, token);
 
       const details = new rsponseModel.Details(newUser.email, {});
 
@@ -92,9 +92,6 @@ const sendEmailUpdatePassword = async email => {
   }
 };
 
-const updatePassword = async (id, newpassword) => {
-  user.updatePassword(id, newpassword).then(() => {});
-};
 //response Models
 const invalidToken = new rsponseModel.AuthResponse("Invalid Token", {});
 const userExistsResponse = new rsponseModel.AuthResponse("User Already Exists", {});
