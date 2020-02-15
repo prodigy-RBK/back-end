@@ -4,10 +4,13 @@ const brandService = require("../services/db services/brands");
 const { verifyRefreshTokensBrand } = require("../middleware/token");
 const upload = require("../middleware/multer");
 
-router.post("/signUp", upload.array("image", 12), (req, res) => {
-  brandOperations.signUp(req).then(response => {
-    res.send(response);
-  });
+router.post("/signUp", upload.array("image", 12), async (req, res) => {
+  try {
+    const brand = await brandOperations.signUp(req);
+    res.status(201).json(brand);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 router.post("/signIn", (req, res) => {

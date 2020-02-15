@@ -45,7 +45,7 @@ const addProduct = (id, productId) => {
 
 //****************************Dashboard********************* */
 const numberOfBrands = async () => {
-  return await Brand.count({});
+  return await Brand.countDocuments({});
 };
 
 module.exports.addBrand = addBrand;
