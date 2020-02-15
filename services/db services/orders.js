@@ -82,8 +82,3 @@ module.exports.getAdminRevenue = getAdminRevenue;
 module.exports.getRevenuebyBrand = getRevenuebyBrand;
 module.exports.numberOfOrders = numberOfOrders;
 module.exports.getBestSales = getBestSales;
-
-//test
-var t = this.getBestSales().then(r => {
-  // console.log(r[0]);
-});

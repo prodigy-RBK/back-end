@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userOperations = require("../operations/users");
 const userServices = require("../services/db services/users");
-const { confirmation, confirmationSocial, confirmationSocialFacebook, verifyRefreshTokens } = require("../middleware/token");
+const { confirmation, confirmationSocial, confirmationSocialFacebook, verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
   userOperations.signUp(req).then(response => {
@@ -20,11 +20,10 @@ router.get("/confirmation/:token", confirmation, (req, res) => {
   userOperations
     .confirmation(req.user.email)
     .then(response => {
-      res.redirect("http://localhost:8080/"); //
+      res.redirect("https://prodigy-store.onrender.com/login"); //
     })
     .catch(err => {
       res.status(500).send(err);
-      console.log(err);
     });
 });
 
@@ -89,7 +88,6 @@ router.get("/wishlist", verifyRefreshTokens, async (req, res) => {
     const wishlist = await userServices.getWishlist(id);
     res.status(200).json({ wishlist: wishlist.wishlist, inWishlist: true });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -100,7 +98,6 @@ router.put("/wishlist", verifyRefreshTokens, async (req, res) => {
     const wishlist = await userServices.addToWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -111,7 +108,6 @@ router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
     const wishlist = await userServices.removeFromWishlist(id, req.body.product);
     res.status(200).json(wishlist.wishlist);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -129,12 +125,29 @@ router.post("/updatePassword/:token", confirmation, (req, res) => {
     })
     .catch(err => {
       res.status(400).send(err);
-      console.log(err);
     });
 });
 
 router.post("/verifyEmailPassword/:token", confirmation, (req, res) => {
   res.send(true);
+});
+
+router.get("/numberOfUser", verifyRefreshTokensBrand, (req, res) => {
+  try {
+    const numberOfUser = userServices.numberOfUser();
+    res.status(200).json(numberOfUser);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.get("/numberOfNewUser/:nbrOfDays", verifyRefreshTokensBrand, (req, res) => {
+  try {
+    const numberOfUser = userServices.numberOfNewUser(req.params.nbrOfDays);
+    res.status(200).json(numberOfUser);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;
