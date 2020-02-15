@@ -57,6 +57,7 @@ const addToWishlist = (id, product) => {
 const removeFromWishlist = (id, product) => {
   return User.findByIdAndUpdate({ _id: id }, { $pull: { wishlist: ObjectId(product) } }, { useFindAndModify: false, new: true });
 };
+
 //****************************Dashboard********************* */
 const numberOfUser = async () => {
   return await User.count({});
