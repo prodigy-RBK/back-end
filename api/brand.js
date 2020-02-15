@@ -9,6 +9,7 @@ router.post("/signUp", upload.array("image", 12), async (req, res) => {
     const brand = await brandOperations.signUp(req);
     res.status(201).json(brand);
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 });
