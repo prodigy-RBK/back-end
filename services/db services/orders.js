@@ -61,7 +61,7 @@ const getRevenuebyBrand = idBrand => {
 };
 
 const numberOfOrders = () => {
-  return Order.count({});
+  return Order.countDocuments({});
 };
 
 const getBestSales = () => {
@@ -69,7 +69,10 @@ const getBestSales = () => {
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
-    .group({ _id: "$value._id", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .group({ _id: "$value", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .lookup({ from: "brands", localField: "_id.brand", foreignField: "_id", as: "_id.brand" })
+    .unwind("_id.brand")
+    .project({ "_id.brand.password": 0 })
     .sort({ qte: -1 });
 };
 
@@ -104,5 +107,5 @@ module.exports.getBestSales = getBestSales;
 module.exports.geSalesByGender = geSalesByGender;
 module.exports.getBestSalesByBrand = getBestSalesByBrand;
 // this.getBestSales().then(t => {
-//   console.log(t);
+//   console.log(t[0]);
 // });
