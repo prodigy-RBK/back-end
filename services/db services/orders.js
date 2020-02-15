@@ -71,6 +71,15 @@ const getBestSales = () => {
     .unwind("value")
     .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
+
+const geSalesByGender = gender => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+};
+
 /************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
@@ -82,3 +91,8 @@ module.exports.getAdminRevenue = getAdminRevenue;
 module.exports.getRevenuebyBrand = getRevenuebyBrand;
 module.exports.numberOfOrders = numberOfOrders;
 module.exports.getBestSales = getBestSales;
+module.exports.geSalesByGender = geSalesByGender;
+
+// this.geSalesByGender("Men").then(t => {
+//   console.log(t);
+// });
