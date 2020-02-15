@@ -52,7 +52,7 @@ var sendMailUpdatePasswordBrand = async function(userMail, token) {
     from: "mehditestmailer@gmail.com",
     to: userMail,
     subject: "Update password ",
-    text: `http://localhost:3000/api/brand//updatePassword/${token}`
+    text: `http://localhost:3000/api/brand/updatePassword/${token}`
   };
 
   transporter.sendMail(mailOptions, function(error, info) {

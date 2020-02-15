@@ -49,7 +49,7 @@ router.delete("/:id/products", verifyRefreshTokens, async (req, res) => {
     res.status(500).json(err);
   }
 });
-//****************************Dashboard********************* */
+//***************************Dashboard********************* */
 router.get("/revenue", async (req, res) => {
   try {
     let revenue = await ordersService.getAdminRevenue();
@@ -61,20 +61,38 @@ router.get("/revenue", async (req, res) => {
 
 router.get("/revenuebyBrand", async (req, res) => {
   try {
-    let revenue = await ordersService.getRevenuebyBrand(req.body.id);
-    res.status(200).json(revenue[0].amount);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("/revenuebyBrand", async (req, res) => {
-  try {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.body.id));
-    console.log(revenue);
     res.status(200).send(revenue);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+router.get("/nuberOfOrders", async (req, res) => {
+  try {
+    let revenue = await ordersService.numberOfOrders();
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/bestSales", async (req, res) => {
+  try {
+    let products = await orderOperations.bestSales();
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/bestSales", async (req, res) => {
+  try {
+    let products = await orderOperations.bestSales();
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

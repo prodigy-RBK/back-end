@@ -60,6 +60,17 @@ const getRevenuebyBrand = idBrand => {
     .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
 
+const numberOfOrders = () => {
+  return Order.count({});
+};
+
+const getBestSales = () => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+};
 /************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
@@ -69,9 +80,10 @@ module.exports.updateProducts = updateProducts;
 module.exports.getAllByUserId = getAllByUserId;
 module.exports.getAdminRevenue = getAdminRevenue;
 module.exports.getRevenuebyBrand = getRevenuebyBrand;
+module.exports.numberOfOrders = numberOfOrders;
+module.exports.getBestSales = getBestSales;
 
 //test
-var t = this.getRevenuebyBrand(ObjectId("5e42bdda87bfd04a506b6a02"));
-t.then(r => {
-  //console.log(r);
+var t = this.getBestSales().then(r => {
+  // console.log(r[0]);
 });
