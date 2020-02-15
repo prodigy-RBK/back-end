@@ -83,7 +83,7 @@ const sendEmailUpdatePassword = async email => {
     return wrongEntryEmail;
   }
   var token = await createConfirmationTokens(userInfo);
-  var result = await sendMailUpdatePasswordUser(userInfo.email, token);
+  var result = await sendMailUpdatePasswordUser(userInfo, token);
   if (result) {
     const details = new rsponseModel.Details(userInfo.email, {});
     return new rsponseModel.AuthResponse("success", details);
