@@ -117,7 +117,6 @@ router.delete("/wishlist", verifyRefreshTokens, async (req, res) => {
 });
 
 router.post("/resetPassword", async (req, res) => {
-  console.log(req.body.email);
   var result = await userOperations.sendEmailUpdatePassword(req.body.email);
   res.status(200).send(result);
 });
