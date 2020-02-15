@@ -72,7 +72,7 @@ const getBestSales = () => {
     .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
 
-const geSalesByGender = gender => {
+const geSalesByGender = () => {
   return Order.aggregate()
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
