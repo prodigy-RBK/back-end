@@ -69,7 +69,8 @@ const getBestSales = () => {
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
-    .group({ _id: null, amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+    .group({ _id: "$value._id", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .sort({ qte: -1 });
 };
 
 const geSalesByGender = () => {
@@ -80,6 +81,15 @@ const geSalesByGender = () => {
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
 
+const getBestSalesByBrand = (nbr = 10) => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .group({ _id: "$value.brand", amount: { $sum: "$products.totalProductPrice" } })
+    .sort({ amount: -1 })
+    .limit(nbr);
+};
 /************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
@@ -92,7 +102,7 @@ module.exports.getRevenuebyBrand = getRevenuebyBrand;
 module.exports.numberOfOrders = numberOfOrders;
 module.exports.getBestSales = getBestSales;
 module.exports.geSalesByGender = geSalesByGender;
-
-// this.geSalesByGender("Men").then(t => {
+module.exports.getBestSalesByBrand = getBestSalesByBrand;
+// this.getBestSales().then(t => {
 //   console.log(t);
 // });

@@ -13,22 +13,22 @@ const createOrder = async (id, productDetails) => {
   return order;
 };
 
-const bestSales = async (id, productDetails) => {
-  var products = await ordersService.getBestSales();
-  var obj = {};
-  products[0].products.forEach(product => {
-    if (obj[product.productId] !== undefined) {
-      obj[product.productId] = obj[product.productId] + product.selectedQuantity;
-    } else {
-      obj[product.productId] = product.selectedQuantity;
-    }
-  });
-  return Object.keys(obj).sort(function(a, b) {
-    return obj[b] - obj[a];
-  });
-  console.log(keysSorted);
-};
+// const bestSales = async (id, productDetails) => {
+//   var products = await ordersService.getBestSales();
+//   var obj = {};
+//   products[0].products.forEach(product => {
+//     if (obj[product.productId] !== undefined) {
+//       obj[product.productId] = obj[product.productId] + product.selectedQuantity;
+//     } else {
+//       obj[product.productId] = product.selectedQuantity;
+//     }
+//   });
+//   return Object.keys(obj).sort(function(a, b) {
+//     return obj[b] - obj[a];
+//   });
+//   console.log(keysSorted);
+// };
 
 module.exports.addToCart = addToCart;
 module.exports.createOrder = createOrder;
-module.exports.bestSales = bestSales;
+// module.exports.bestSales = bestSales;

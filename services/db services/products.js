@@ -139,6 +139,7 @@ const getTopRatingByBrand = (nbOfBrand = 10) => {
     .sort({ avg: -1 })
     .limit(nbOfBrand);
 };
+
 module.exports.getAll = getAll;
 module.exports.getProductsbybehavoir = getProductsbybehavoir;
 module.exports.getTags = getTags;
@@ -161,6 +162,3 @@ module.exports.increaseOpinions = increaseOpinions;
 module.exports.searchForProducts = searchForProducts;
 module.exports.getTopRating = getTopRating;
 module.exports.getTopRatingByBrand = getTopRatingByBrand;
-this.getTopRatingByBrand().then(t => {
-  console.log(t);
-});

@@ -79,7 +79,7 @@ router.get("/nuberOfOrders", async (req, res) => {
 
 router.get("/bestSales", async (req, res) => {
   try {
-    let products = await orderOperations.bestSales();
+    let products = await ordersService.bestSales();
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json(err);
