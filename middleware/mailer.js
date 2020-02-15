@@ -187,10 +187,10 @@ var sendMail = async function(user, token) {
     }
   });
 };
-var sendMailUpdatePasswordUser = async function(userMail, token) {
+var sendMailUpdatePasswordUser = async function(user, token) {
   var mailOptions = {
     from: "mehditestmailer@gmail.com",
-    to: userMail,
+    to: user.email,
     subject: "Update password",
     //  text: `https://localhost:5000/forgetPassword/${token}`
     html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
