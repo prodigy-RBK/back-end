@@ -108,8 +108,9 @@ let verifyRefreshTokens = async (req, res, next) => {
 let verifyRefreshTokensBrand = async (req, res, next) => {
   var refreshToken = req.headers["x-refresh-token"];
   var token = req.headers["x-token"];
-  const info = jwt.decode(token);
 
+  const info = jwt.decode(token);
+  // console.log(info);
   if (info) {
     let userId = -1;
 

@@ -25,8 +25,9 @@ router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
 
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
-    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.body.id));
-    res.status(200).send(revenue);
+    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
+    console.log(revenue);
+    res.status(200).json(revenue[0].amount);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -92,8 +93,9 @@ router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
 });
 
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
+  console.log(req.user);
   try {
-    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.body.id));
+    let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
     res.status(200).send(revenue);
   } catch (err) {
     res.status(500).json(err);

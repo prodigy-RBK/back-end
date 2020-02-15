@@ -126,9 +126,10 @@ const changeQuantity = (_id, size, color, qte) => {
 };
 //****************************Dashboard********************* */
 
-const getTopRating = nbofproduct => {
+const getTopRating = (nbofproduct = 10) => {
   return Product.find()
     .sort({ rating: -1 })
+    .populate("brand")
     .limit(nbofproduct);
   //.group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };

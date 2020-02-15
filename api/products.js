@@ -118,6 +118,14 @@ router.put("/:id/review", async (req, res) => {
   }
 });
 
+router.get("/mostRated", async (req, res) => {
+  try {
+    let product = await productsService.getTopRating();
+    res.status(200).send(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 router.put("/:id/availability", async (req, res) => {
   try {
     const { size, color, quantity } = req.body;
