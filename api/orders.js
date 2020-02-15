@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const ordersService = require("../services/db services/orders");
 const orderOperations = require("../operations/orders");
-const { verifyRefreshTokens } = require("../middleware/token");
+const { verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
 const ObjectId = require("mongodb").ObjectId;
 
 router.get("/user", verifyRefreshTokens, async (req, res) => {
@@ -49,8 +49,8 @@ router.delete("/:id/products", verifyRefreshTokens, async (req, res) => {
     res.status(500).json(err);
   }
 });
-//***************************Dashboard********************* */
-router.get("/revenue", async (req, res) => {
+//****************************Dashboard********************* */
+router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getAdminRevenue();
     res.status(200).json(revenue[0].amount);
@@ -59,7 +59,7 @@ router.get("/revenue", async (req, res) => {
   }
 });
 
-router.get("/revenuebyBrand", async (req, res) => {
+router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.body.id));
     res.status(200).send(revenue);
@@ -79,16 +79,7 @@ router.get("/nuberOfOrders", async (req, res) => {
 
 router.get("/bestSales", async (req, res) => {
   try {
-    let products = await orderOperations.bestSales();
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("/bestSales", async (req, res) => {
-  try {
-    let products = await orderOperations.bestSales();
+    let products = await ordersService.bestSales();
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json(err);
