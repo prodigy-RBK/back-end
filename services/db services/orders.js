@@ -76,12 +76,13 @@ const getBestSales = () => {
     .sort({ qte: -1 });
 };
 
-const geSalesByGender = () => {
+const getSalesByGender = () => {
   return Order.aggregate()
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
-    .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+    .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
+    .sort({ amount: 1 });
 };
 
 const getBestSalesByBrand = (idbrand, nbr = 10) => {
@@ -125,7 +126,7 @@ module.exports.getAdminRevenue = getAdminRevenue;
 module.exports.getRevenuebyBrand = getRevenuebyBrand;
 module.exports.numberOfOrders = numberOfOrders;
 module.exports.getBestSales = getBestSales;
-module.exports.geSalesByGender = geSalesByGender;
+module.exports.getSalesByGender = getSalesByGender;
 module.exports.getBestSalesByBrand = getBestSalesByBrand;
 module.exports.getBestSalesByBrandAdmin = getBestSalesByBrandAdmin;
 module.exports.getAdminRevenueByDays = getAdminRevenueByDays;
