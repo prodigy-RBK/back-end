@@ -27,6 +27,10 @@ const orderSchema = mongoose.Schema({
     type: String,
     default: "pending"
   },
+  creationDate: {
+    type: Date,
+    default: Date.now
+  },
   orderPrice: Number,
   deliveryInfo: {
     street1: String,
