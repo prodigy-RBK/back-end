@@ -31,6 +31,16 @@ router.get("/revenueDaily", verifyRefreshTokensBrand, async (req, res) => {
   }
 });
 
+router.get("/revenueBrandDaily", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getBrandRevenueByDays(ObjectId(req.user._id));
+
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
@@ -43,6 +53,14 @@ router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/salesbyGender", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getSalesByGender();
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+router.get("/salesBrandbyGender", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getSaleBrandByGender(ObjectId(req.user._id));
     res.status(200).json(revenue);
   } catch (err) {
     res.status(500).json(err);
@@ -61,7 +79,6 @@ router.get("/bestSalesByBrand", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/bestSalesproductsByBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let bestSales = await ordersService.getBestSalesByBrand(ObjectId(req.user._id), 5);
-    console.log(bestSales);
     res.status(200).json(bestSales);
   } catch (err) {
     res.status(500).json(err);
