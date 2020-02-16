@@ -84,15 +84,36 @@ const geSalesByGender = () => {
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
 
-const getBestSalesByBrand = (nbr = 10) => {
+const getBestSalesByBrand = (idbrand, nbr = 10) => {
   return Order.aggregate()
     .unwind("products")
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
-    .group({ _id: "$value.brand", amount: { $sum: "$products.totalProductPrice" } })
-    .sort({ amount: -1 })
+    .match({ "value.brand": idbrand })
+    .group({ _id: "$value", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .lookup({ from: "brands", localField: "_id.brand", foreignField: "_id", as: "_id.brand" })
+    .unwind("_id.brand")
+    .project({ "_id.brand.password": 0 })
+    .sort({ qte: -1 })
     .limit(nbr);
 };
+const getBestSalesByBrandAdmin = (nbr = 10) => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .group({ _id: "$value.brand", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
+    .sort({ qte: -1 })
+    .limit(nbr);
+};
+
+const getAdminRevenueByDays = () => {
+  return Order.aggregate()
+    .group({ _id: { $dateToString: { format: "%Y-%m-%d", date: "$creationDate" } }, amount: { $sum: "$orderPrice" } })
+    .sort({ _id: -1 })
+    .limit(7);
+};
+
 /************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
@@ -106,6 +127,5 @@ module.exports.numberOfOrders = numberOfOrders;
 module.exports.getBestSales = getBestSales;
 module.exports.geSalesByGender = geSalesByGender;
 module.exports.getBestSalesByBrand = getBestSalesByBrand;
-// this.getBestSales().then(t => {
-//   console.log(t[0]);
-// });
+module.exports.getBestSalesByBrandAdmin = getBestSalesByBrandAdmin;
+module.exports.getAdminRevenueByDays = getAdminRevenueByDays;

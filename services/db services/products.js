@@ -129,6 +129,7 @@ const changeQuantity = (_id, size, color, qte) => {
 const getTopRating = (nbofproduct = 10) => {
   return Product.find()
     .sort({ rating: -1 })
+    .populate("brand")
     .limit(nbofproduct);
   //.group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
 };
