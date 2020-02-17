@@ -44,8 +44,10 @@ router.get("/revenueBrandDaily", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
+    console.log(revenue);
     res.status(200).json(revenue[0].amount);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
