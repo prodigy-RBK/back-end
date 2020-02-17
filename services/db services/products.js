@@ -141,6 +141,11 @@ const getTopRatingByBrand = (nbOfBrand = 10) => {
     .limit(nbOfBrand);
 };
 
+const getTopRatingProductByBrand = (idBrand, nbOfBrand = 10) => {
+  return Product.find({ brand: idBrand })
+    .sort({ rating: -1 })
+    .limit(nbOfBrand);
+};
 module.exports.getAll = getAll;
 module.exports.getProductsbybehavoir = getProductsbybehavoir;
 module.exports.getTags = getTags;
@@ -163,3 +168,4 @@ module.exports.increaseOpinions = increaseOpinions;
 module.exports.searchForProducts = searchForProducts;
 module.exports.getTopRating = getTopRating;
 module.exports.getTopRatingByBrand = getTopRatingByBrand;
+module.exports.getTopRatingProductByBrand = getTopRatingProductByBrand;

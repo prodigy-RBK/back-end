@@ -2,6 +2,7 @@ const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
 const { verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
+const ObjectId = require("mongodb").ObjectId;
 const upload = require("../middleware/multer");
 const cloudinary = require("cloudinary").v2;
 
@@ -126,6 +127,16 @@ router.get("/mostRated", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+router.get("/mostRatedByBrand", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let product = await productsService.getTopRatingProductByBrand(ObjectId(req.user._id));
+    res.status(200).send(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.put("/:id/availability", async (req, res) => {
   try {
     const { size, color, quantity } = req.body;

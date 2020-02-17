@@ -19,15 +19,6 @@ router.post("/signIn", (req, res) => {
   });
 });
 
-router.get("/", async (req, res) => {
-  try {
-    let brands = await brandService.getAllBrands();
-    res.status(200).json(brands);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 router.get("/one", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let brands = await brandService.findBrandById(req.user._id);
@@ -39,5 +30,13 @@ router.get("/one", verifyRefreshTokensBrand, async (req, res) => {
 
 router.get("/verifytoken", verifyRefreshTokensBrand, (req, res) => {
   res.send({ authed: true, idbrand: req.user._id });
+});
+router.get("/", async (req, res) => {
+  try {
+    let brands = await brandService.getAllBrands();
+    res.status(200).json(brands);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 module.exports = router;
