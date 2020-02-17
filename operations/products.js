@@ -30,6 +30,7 @@ const addProduct = async (id, productDetails, originalImages) => {
   const finalImages = images.map(image => image.secure_url);
   productDetails.images = finalImages;
   productDetails.brand = id;
+  productDetails.availability = JSON.parse(productDetails.availability);
   let product = await productsService.addProduct(productDetails);
   await brandsService.addProduct(id, product._id);
   return product;
