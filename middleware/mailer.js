@@ -187,6 +187,7 @@ var sendMail = async function(user, token) {
   });
 };
 var sendMailUpdatePasswordUser = async function(user, token) {
+  token = token.replace(".", "-");
   var mailOptions = {
     from: "mehditestmailer@gmail.com",
     to: user.email,
