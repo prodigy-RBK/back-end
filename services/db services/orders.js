@@ -82,7 +82,7 @@ const getSalesByGender = () => {
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
-    .sort({ amount: 1 });
+    .sort({ amount: -1 });
 };
 
 const getSaleBrandByGender = idBrand => {
@@ -92,7 +92,7 @@ const getSaleBrandByGender = idBrand => {
     .unwind("value")
     .match({ "value.brand": idBrand })
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
-    .sort({ amount: 1 });
+    .sort({ amount: -1 });
 };
 const getBestSalesByBrandAdmin = (nbr = 10) => {
   return Order.aggregate()
