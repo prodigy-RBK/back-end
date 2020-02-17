@@ -97,6 +97,7 @@ router.post("/product", upload.array("images", 12), verifyRefreshTokensBrand, as
     let product = await productsOperation.addProduct(req.user._id, req.body, req.files);
     res.status(201).json(product);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -168,7 +169,9 @@ router.put("/:id/reply", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
+    console.log(req.params.id, req.body);
     let updatedProduct = await productsService.updateProduct(req.params.id, req.body);
+    console.log(updatedProduct);
     res.status(200).json(updatedProduct);
   } catch (err) {
     res.status(500).json(err);

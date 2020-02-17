@@ -15,10 +15,10 @@ const fashionApi = require("../api/fashion");
 module.exports = async app => {
   app.use(
     cors({
-      exposedHeaders: ["Content-Length", "x-token", "x-refresh-token"]
+      exposedHeaders: ["Content-Type", "x-token", "x-refresh-token"]
     })
   );
-  app.use(cors());
+  // app.use(cors());
   app.use(express.json());
   app.use("/api/user", user);
   app.use("/api/brand", brand);
