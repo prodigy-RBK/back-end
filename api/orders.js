@@ -3,6 +3,7 @@ const ordersService = require("../services/db services/orders");
 const orderOperations = require("../operations/orders");
 const { verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
 const ObjectId = require("mongodb").ObjectId;
+
 router.get("/user", verifyRefreshTokens, async (req, res) => {
   try {
     let order = await ordersService.getAllByUserId(req.user._id);
@@ -17,7 +18,6 @@ router.get("/revenue", verifyRefreshTokensBrand, async (req, res) => {
     let revenue = await ordersService.getAdminRevenue();
     res.status(200).json(revenue[0].amount);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -27,13 +27,22 @@ router.get("/revenueDaily", verifyRefreshTokensBrand, async (req, res) => {
     let revenue = await ordersService.getAdminRevenueByDays();
     res.status(200).json(revenue);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
+
+router.get("/revenueBrandDaily", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getBrandRevenueByDays(ObjectId(req.user._id));
+
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
-   
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
     res.status(200).json(revenue[0].amount);
   } catch (err) {
@@ -41,10 +50,26 @@ router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   }
 });
 
+router.get("/salesbyGender", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getSalesByGender();
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+router.get("/salesBrandbyGender", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getSaleBrandByGender(ObjectId(req.user._id));
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/bestSalesByBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
-    let bestSales = await ordersService.getBestSalesByBrandAdmin(ObjectId(req.user._id));
-    console.log(bestSales);
+    let bestSales = await ordersService.getBestSalesByBrandAdmin();
     res.status(200).json(bestSales);
   } catch (err) {
     res.status(500).json(err);
@@ -54,7 +79,6 @@ router.get("/bestSalesByBrand", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/bestSalesproductsByBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let bestSales = await ordersService.getBestSalesByBrand(ObjectId(req.user._id), 5);
-    console.log(bestSales);
     res.status(200).json(bestSales);
   } catch (err) {
     res.status(500).json(err);

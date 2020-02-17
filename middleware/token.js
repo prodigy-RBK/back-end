@@ -152,7 +152,7 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
       }
 
       const [newToken, newRefreshToken] = await createTokens(findUser);
-      console.log(newToken);
+      // console.log(newToken);
       res.set("x-token", newToken);
       res.set("x-refresh-token", newRefreshToken);
       const { firstName, lastName, _id } = findUser;
