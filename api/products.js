@@ -2,6 +2,7 @@ const router = require("express").Router();
 const productsService = require("../services/db services/products");
 const productsOperation = require("../operations/products");
 const { verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
+const ObjectId = require("mongodb").ObjectId;
 const upload = require("../middleware/multer");
 const cloudinary = require("cloudinary").v2;
 
@@ -93,9 +94,8 @@ router.get("/gender/:id", async (req, res) => {
 
 router.post("/product", upload.array("images", 12), verifyRefreshTokensBrand, async (req, res) => {
   try {
-    console.log(req.user._id);
     let product = await productsOperation.addProduct(req.user._id, req.body, req.files);
-    res.status(201).json("product");
+    res.status(201).json(product);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -114,6 +114,24 @@ router.put("/:id/review", async (req, res) => {
   try {
     let updatedProduct = await productsService.addReview(req.params.id, req.body.review, req.user);
     res.status(200).json(updatedProduct);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/mostRated", async (req, res) => {
+  try {
+    let product = await productsService.getTopRating();
+    res.status(200).send(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/mostRatedByBrand", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let product = await productsService.getTopRatingProductByBrand(ObjectId(req.user._id));
+    res.status(200).send(product);
   } catch (err) {
     res.status(500).json(err);
   }

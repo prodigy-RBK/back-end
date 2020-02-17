@@ -6,7 +6,7 @@ const orderSchema = mongoose.Schema({
     type: [
       {
         productId: {
-          type: mongoose.Schema.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true
         },
@@ -26,6 +26,10 @@ const orderSchema = mongoose.Schema({
   orderStatus: {
     type: String,
     default: "pending"
+  },
+  creationDate: {
+    type: Date,
+    default: Date.now
   },
   orderPrice: Number,
   deliveryInfo: {

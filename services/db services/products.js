@@ -124,7 +124,28 @@ const changeQuantity = (_id, size, color, qte) => {
     { useFindAndModify: false, new: true }
   );
 };
+//****************************Dashboard********************* */
 
+const getTopRating = (nbofproduct = 10) => {
+  return Product.find()
+    .sort({ rating: -1 })
+    .populate("brand")
+    .limit(nbofproduct);
+  //.group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } });
+};
+
+const getTopRatingByBrand = (nbOfBrand = 10) => {
+  return Product.aggregate()
+    .group({ _id: "$brand", avg: { $avg: "$rating" } })
+    .sort({ avg: -1 })
+    .limit(nbOfBrand);
+};
+
+const getTopRatingProductByBrand = (idBrand, nbOfBrand = 10) => {
+  return Product.find({ brand: idBrand })
+    .sort({ rating: -1 })
+    .limit(nbOfBrand);
+};
 module.exports.getAll = getAll;
 module.exports.getProductsbybehavoir = getProductsbybehavoir;
 module.exports.getTags = getTags;
@@ -145,3 +166,6 @@ module.exports.numberOfProducts = numberOfProducts;
 module.exports.decreaseQuantity = decreaseQuantity;
 module.exports.increaseOpinions = increaseOpinions;
 module.exports.searchForProducts = searchForProducts;
+module.exports.getTopRating = getTopRating;
+module.exports.getTopRatingByBrand = getTopRatingByBrand;
+module.exports.getTopRatingProductByBrand = getTopRatingProductByBrand;
