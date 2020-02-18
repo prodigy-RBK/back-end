@@ -45,7 +45,6 @@ router.get("/", async (req, res) => {
 });
 //*******************brand registration************* */
 router.post("/sendEmailForRegisterBrand", async (req, res) => {
-  console.log(req.body);
   var result = await brandOperations.sendEmailRegistrationBrand(req.body.email);
   res.status(200).send(result);
 });
