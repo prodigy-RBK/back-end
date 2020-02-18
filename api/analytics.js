@@ -21,7 +21,7 @@ const jwt = new google.auth.JWT({
 });
 function getmostviews(array) {
   var object = {};
-  for (var i = 0; i < array.length; i++) {
+  for (var i = 1; i < array.length; i++) {
     object[array[i][0].split("/")[1]] = array[i][1];
   }
   return object;

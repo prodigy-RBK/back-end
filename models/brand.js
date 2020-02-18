@@ -10,6 +10,11 @@ const brandSchema = mongoose.Schema({
     required: true,
     type: String
   },
+  type: {
+    required: true,
+    type: String,
+    default: "brand"
+  },
   password: {
     required: true,
     type: String
