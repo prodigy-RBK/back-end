@@ -2,7 +2,14 @@ const express = require("express");
 const router = express.Router();
 const userOperations = require("../operations/users");
 const userServices = require("../services/db services/users");
-const { confirmation, confirmationSocial, confirmationSocialFacebook, verifyRefreshTokens, verifyRefreshTokensBrand } = require("../middleware/token");
+const {
+  confirmation,
+  confirmationSocial,
+  confirmationSocialFacebook,
+  verifyRefreshTokens,
+  verifyRefreshTokensBrand,
+  confirmationMailPassword
+} = require("../middleware/token");
 
 router.post("/signUp", (req, res) => {
   userOperations.signUp(req).then(response => {
@@ -117,7 +124,7 @@ router.post("/resetPassword", async (req, res) => {
   res.status(200).send(result);
 });
 
-router.post("/updatePassword/:token", confirmation, (req, res) => {
+router.post("/updatePassword/:token", confirmationMailPassword, (req, res) => {
   userServices
     .updatePassword(req.user._id, req.body.password)
     .then(response => {
@@ -128,8 +135,8 @@ router.post("/updatePassword/:token", confirmation, (req, res) => {
     });
 });
 
-router.post("/verifyEmailPassword/:token", confirmation, (req, res) => {
-  res.send(true);
+router.post("/verifyEmailPassword/:token", confirmationMailPassword, (req, res) => {
+  res.status(200).send(true);
 });
 
 router.get("/numberOfUser", verifyRefreshTokensBrand, async (req, res) => {
