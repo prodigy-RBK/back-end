@@ -115,10 +115,11 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
 
     try {
       const data = jwt.verify(token, secretKey);
-      const { firstName, lastName, _id, email } = data.user;
+      const { firstName, lastName, _id, email, type } = data.user;
       req.user = {
         firstName,
         lastName,
+        type,
         _id,
         email
       };
@@ -156,11 +157,13 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
       // console.log(newToken);
       res.set("x-token", newToken);
       res.set("x-refresh-token", newRefreshToken);
-      console.log("ok t2");
-      const { firstName, lastName, _id } = findUser;
+
+      const { firstName, lastName, _id, type } = findUser;
+
       req.user = {
         firstName,
         lastName,
+        type,
         _id
       };
       next();
