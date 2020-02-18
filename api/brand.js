@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const brandOperations = require("../operations/brands");
 const brandService = require("../services/db services/brands");
-const { verifyRefreshTokensBrand } = require("../middleware/token");
+const { verifyRefreshTokensBrand, confirmationMailBrand } = require("../middleware/token");
 const upload = require("../middleware/multer");
 
 router.post("/signUp", upload.array("image", 12), async (req, res) => {
@@ -43,4 +43,14 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//*******************brand registration************* */
+router.post("/sendEmailForRegisterBrand", async (req, res) => {
+  console.log(req.body);
+  var result = await brandOperations.sendEmailRegistrationBrand(req.body.email);
+  res.status(200).send(result);
+});
+router.post("/verifyEmailRegisterBrand/:token", confirmationMailBrand, (req, res) => {
+  res.status(200).send(true); //rediricte to register page for brand
+});
+
 module.exports = router;

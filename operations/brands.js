@@ -1,9 +1,10 @@
 const brand = require("../services/db services/brands");
 const rsponseModel = require("./responseModel");
 const bcrypt = require("bcryptjs");
-const { createTokens } = require("../middleware/token");
+const { createTokens, createConfirmationTokens } = require("../middleware/token");
 const cloudinary = require("cloudinary").v2;
 const path = require("path");
+const { sendMailBrand } = require("../middleware/mailer");
 
 require("../loaders/mongoose");
 
@@ -46,6 +47,17 @@ const signIn = async (request, res) => {
   });
 };
 
+const sendEmailRegistrationBrand = async email => {
+  console.log("---->", email);
+  var token = await createConfirmationTokens(email);
+  var result = await sendMailBrand(email, token);
+  if (result) {
+    const details = new rsponseModel.Details(email, {});
+    return new rsponseModel.AuthResponse("success", details);
+  } else {
+    return serverErrorResponse;
+  }
+};
 //response Models
 const userExistsResponse = new rsponseModel.AuthResponse("Brand Already Exists", {});
 const serverErrorResponse = new rsponseModel.AuthResponse("Server Side Error", {});
@@ -54,3 +66,4 @@ const wrongEntryUsername = new rsponseModel.AuthResponse("wrong Username", {});
 
 module.exports.signUp = signUp;
 module.exports.signIn = signIn;
+module.exports.sendEmailRegistrationBrand = sendEmailRegistrationBrand;
