@@ -200,6 +200,19 @@ const confirmationMailPassword = async (req, res, next) => {
   }
 };
 
+const confirmationMailBrand = async (req, res, next) => {
+  try {
+    let token = req.params.token.replace(/-/g, ".");
+    console.log(token);
+    const { email } = jwt.verify(token, secretKey);
+    req.email = email;
+    next();
+    // var update = user.UpdateToActive(resp.user.email)
+  } catch (err) {
+    res.status(401).send(invalidToken);
+    return;
+  }
+};
 // const confirmationUpdatePassword = async (req, res, next) => {
 //   try {
 //     const { user } = jwt.verify(req.params.token, secretKey);
@@ -285,3 +298,4 @@ module.exports.createConfirmationTokens = createConfirmationTokens;
 module.exports.confirmationSocial = confirmationSocial;
 module.exports.confirmationSocialFacebook = confirmationSocialFacebook;
 module.exports.confirmationMailPassword = confirmationMailPassword;
+module.exports.confirmationMailBrand = confirmationMailBrand;
