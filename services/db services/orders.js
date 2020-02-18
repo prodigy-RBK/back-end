@@ -134,6 +134,15 @@ const getBrandRevenueByDays = idbrand => {
     .limit(7);
 };
 
+const getNbProductSoldByBrand = idbrand => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .match({ "value.brand": idbrand })
+    .group({ _id: null, qte: { $sum: "$products.selectedQuantity" } });
+};
+
 /************************************************************** */
 module.exports.getOneById = getOneById;
 module.exports.createOrder = createOrder;
@@ -151,3 +160,4 @@ module.exports.getBestSalesByBrandAdmin = getBestSalesByBrandAdmin;
 module.exports.getAdminRevenueByDays = getAdminRevenueByDays;
 module.exports.getBrandRevenueByDays = getBrandRevenueByDays;
 module.exports.getSaleBrandByGender = getSaleBrandByGender;
+module.exports.getNbProductSoldByBrand = getNbProductSoldByBrand;
