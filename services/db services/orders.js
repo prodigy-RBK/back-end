@@ -73,7 +73,8 @@ const getBestSales = () => {
     .lookup({ from: "brands", localField: "_id.brand", foreignField: "_id", as: "_id.brand" })
     .unwind("_id.brand")
     .project({ "_id.brand.password": 0 })
-    .sort({ qte: -1 });
+    .sort({ qte: -1 })
+    .limit(10);
 };
 
 const getSalesByGender = () => {
@@ -82,7 +83,7 @@ const getSalesByGender = () => {
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
-    .sort({ amount: 1 });
+    .sort({ amount: -1 });
 };
 
 const getSaleBrandByGender = idBrand => {
@@ -92,7 +93,7 @@ const getSaleBrandByGender = idBrand => {
     .unwind("value")
     .match({ "value.brand": idBrand })
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
-    .sort({ amount: 1 });
+    .sort({ amount: -1 });
 };
 const getBestSalesByBrandAdmin = (nbr = 10) => {
   return Order.aggregate()
@@ -101,7 +102,7 @@ const getBestSalesByBrandAdmin = (nbr = 10) => {
     .unwind("value")
     .group({ _id: "$value.brand", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
     .sort({ qte: -1 })
-    .limit(nbr);
+    .limit(10);
 };
 
 const getAdminRevenueByDays = () => {
@@ -121,7 +122,7 @@ const getBestSalesByBrand = (idbrand, nbr = 10) => {
     .unwind("_id.brand")
     .project({ "_id.brand.password": 0 })
     .sort({ qte: -1 })
-    .limit(nbr);
+    .limit(10);
 };
 const getBrandRevenueByDays = idbrand => {
   return Order.aggregate()
@@ -132,6 +133,15 @@ const getBrandRevenueByDays = idbrand => {
     .group({ _id: { $dateToString: { format: "%Y-%m-%d", date: "$creationDate" } }, amount: { $sum: "$orderPrice" } })
     .sort({ _id: -1 })
     .limit(7);
+};
+
+const getNbProductSoldByBrand = idbrand => {
+  return Order.aggregate()
+    .unwind("products")
+    .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
+    .unwind("value")
+    .match({ "value.brand": idbrand })
+    .group({ _id: null, qte: { $sum: "$products.selectedQuantity" } });
 };
 
 /************************************************************** */
@@ -151,3 +161,4 @@ module.exports.getBestSalesByBrandAdmin = getBestSalesByBrandAdmin;
 module.exports.getAdminRevenueByDays = getAdminRevenueByDays;
 module.exports.getBrandRevenueByDays = getBrandRevenueByDays;
 module.exports.getSaleBrandByGender = getSaleBrandByGender;
+module.exports.getNbProductSoldByBrand = getNbProductSoldByBrand;
