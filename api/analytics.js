@@ -26,7 +26,7 @@ function getmostviews(array) {
   }
   return object;
 }
-var j = schedule.scheduleJob("* 09 * * *", async function() {
+var j = schedule.scheduleJob("00 00 12 * * 0-6", async function() {
   const result = await analytics.data.ga.get({
     auth: jwt,
     ids: `ga:${viewId}`,
@@ -42,10 +42,10 @@ router.get("/pageview", async (req, res) => {
   const result = await analytics.data.ga.get({
     auth: jwt,
     ids: `ga:${viewId}`,
-    "start-date": "30daysAgo",
+    "start-date": "yesterday",
     "end-date": "today",
     metrics: ["ga:totalEvents"],
-    dimensions: ["ga:pagePathLevel2"]
+    dimensions: ["ga:pagePath"]
   });
 
   var endresult = await getmostviews(result.data.rows);

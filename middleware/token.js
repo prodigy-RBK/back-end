@@ -108,16 +108,18 @@ let verifyRefreshTokens = async (req, res, next) => {
 let verifyRefreshTokensBrand = async (req, res, next) => {
   var refreshToken = req.headers["x-refresh-token"];
   var token = req.headers["x-token"];
+  //  console.log(token);
   const info = jwt.decode(token);
   if (info) {
     let userId = -1;
 
     try {
       const data = jwt.verify(token, secretKey);
-      const { firstName, lastName, _id, email } = data.user;
+      const { firstName, lastName, _id, email, type } = data.user;
       req.user = {
         firstName,
         lastName,
+        type,
         _id,
         email
       };
@@ -152,13 +154,14 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
       }
 
       const [newToken, newRefreshToken] = await createTokens(findUser);
-      console.log(newToken);
+      // console.log(newToken);
       res.set("x-token", newToken);
       res.set("x-refresh-token", newRefreshToken);
-      const { firstName, lastName, _id } = findUser;
+      const { firstName, lastName, _id, type } = findUser;
       req.user = {
         firstName,
         lastName,
+        type,
         _id
       };
       next();
@@ -173,6 +176,19 @@ let verifyRefreshTokensBrand = async (req, res, next) => {
 const confirmation = async (req, res, next) => {
   try {
     const { user } = jwt.verify(req.params.token, secretKey);
+    req.user = user;
+    next();
+    // var update = user.UpdateToActive(resp.user.email)
+  } catch (err) {
+    res.status(401).send(invalidToken);
+    return;
+  }
+};
+
+const confirmationMailPassword = async (req, res, next) => {
+  try {
+    let token = req.params.token.replace("-", ".");
+    const { user } = jwt.verify(token, secretKey);
     req.user = user;
     next();
     // var update = user.UpdateToActive(resp.user.email)
@@ -266,3 +282,4 @@ module.exports.confirmation = confirmation;
 module.exports.createConfirmationTokens = createConfirmationTokens;
 module.exports.confirmationSocial = confirmationSocial;
 module.exports.confirmationSocialFacebook = confirmationSocialFacebook;
+module.exports.confirmationMailPassword = confirmationMailPassword;

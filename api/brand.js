@@ -13,18 +13,12 @@ router.post("/signUp", upload.array("image", 12), async (req, res) => {
   }
 });
 
-router.post("/signIn", (req, res) => {
-  brandOperations.signIn(req, res).then(response => {
-    res.send(response);
-  });
-});
-
-router.get("/", async (req, res) => {
+router.post("/signIn", async (req, res) => {
   try {
-    let brands = await brandService.getAllBrands();
-    res.status(200).json(brands);
+    const response = await brandOperations.signIn(req, res);
+    res.status(201).json(response);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).send(err);
   }
 });
 
@@ -39,5 +33,14 @@ router.get("/one", verifyRefreshTokensBrand, async (req, res) => {
 
 router.get("/verifytoken", verifyRefreshTokensBrand, (req, res) => {
   res.send({ authed: true, idbrand: req.user._id });
+});
+
+router.get("/", async (req, res) => {
+  try {
+    let brands = await brandService.getAllBrands();
+    res.status(200).json(brands);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 module.exports = router;

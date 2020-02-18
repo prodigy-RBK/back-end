@@ -31,11 +31,23 @@ router.get("/revenueDaily", verifyRefreshTokensBrand, async (req, res) => {
   }
 });
 
+router.get("/revenueBrandDaily", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getBrandRevenueByDays(ObjectId(req.user._id));
+
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
+    console.log(revenue);
     res.status(200).json(revenue[0].amount);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -43,6 +55,14 @@ router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/salesbyGender", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let revenue = await ordersService.getSalesByGender();
+    res.status(200).json(revenue);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+router.get("/salesBrandbyGender", verifyRefreshTokensBrand, async (req, res) => {
+  try {
+    let revenue = await ordersService.getSaleBrandByGender(ObjectId(req.user._id));
     res.status(200).json(revenue);
   } catch (err) {
     res.status(500).json(err);
@@ -61,7 +81,6 @@ router.get("/bestSalesByBrand", verifyRefreshTokensBrand, async (req, res) => {
 router.get("/bestSalesproductsByBrand", verifyRefreshTokensBrand, async (req, res) => {
   try {
     let bestSales = await ordersService.getBestSalesByBrand(ObjectId(req.user._id), 5);
-    console.log(bestSales);
     res.status(200).json(bestSales);
   } catch (err) {
     res.status(500).json(err);
@@ -83,8 +102,6 @@ router.get("/bestSales", async (req, res) => {
     let products = await ordersService.getBestSales();
     res.status(200).json(products);
   } catch (err) {
-    console.log(err);
-
     res.status(500).json(err);
   }
 });
@@ -94,7 +111,6 @@ router.post("/order", verifyRefreshTokens, async (req, res) => {
     let order = await orderOperations.createOrder(req.user._id, req.body);
     res.status(201).json(order);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
