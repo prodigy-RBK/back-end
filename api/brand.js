@@ -32,7 +32,7 @@ router.get("/one", verifyRefreshTokensBrand, async (req, res) => {
 });
 
 router.get("/verifytoken", verifyRefreshTokensBrand, (req, res) => {
-  res.send({ authed: true, idbrand: req.user._id });
+  res.send({ authed: true, idbrand: req.user._id, type: req.user.type });
 });
 
 router.get("/", async (req, res) => {
