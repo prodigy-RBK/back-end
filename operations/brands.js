@@ -35,7 +35,7 @@ const signIn = async (request, res) => {
       let psw = await bcrypt.compare(request.body.password, loginBrand.password);
       if (psw) {
         var tokens = await createTokens(loginBrand); //tokens is an array of tokens
-        const details = new rsponseModel.Details(loginBrand.email, { token: tokens[0], refreshToken: tokens[1] });
+        const details = new rsponseModel.Details({ email: loginBrand.email, type: loginBrand.type }, { token: tokens[0], refreshToken: tokens[1] });
         res.set("x-token", tokens[0]);
         res.set("x-refresh-token", tokens[1]);
         return new rsponseModel.AuthResponse("success", details);

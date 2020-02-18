@@ -46,6 +46,7 @@ router.get("/revenuebyBrand", verifyRefreshTokensBrand, async (req, res) => {
     let revenue = await ordersService.getRevenuebyBrand(ObjectId(req.user._id));
     res.status(200).json(revenue);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -109,8 +110,6 @@ router.get("/bestSales", async (req, res) => {
     let products = await ordersService.getBestSales();
     res.status(200).json(products);
   } catch (err) {
-    console.log(err);
-
     res.status(500).json(err);
   }
 });
@@ -120,7 +119,6 @@ router.post("/order", verifyRefreshTokens, async (req, res) => {
     let order = await orderOperations.createOrder(req.user._id, req.body);
     res.status(201).json(order);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });

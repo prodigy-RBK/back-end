@@ -73,7 +73,8 @@ const getBestSales = () => {
     .lookup({ from: "brands", localField: "_id.brand", foreignField: "_id", as: "_id.brand" })
     .unwind("_id.brand")
     .project({ "_id.brand.password": 0 })
-    .sort({ qte: -1 });
+    .sort({ qte: -1 })
+    .limit(10);
 };
 
 const getSalesByGender = () => {
@@ -82,7 +83,7 @@ const getSalesByGender = () => {
     .lookup({ from: "products", localField: "products.productId", foreignField: "_id", as: "value" })
     .unwind("value")
     .group({ _id: "$value.gender", amount: { $sum: "$products.totalProductPrice" }, products: { $push: "$products" } })
-    .sort({ amount: 1 });
+    .sort({ amount: -1 });
 };
 
 const getSaleBrandByGender = idBrand => {
@@ -101,7 +102,7 @@ const getBestSalesByBrandAdmin = (nbr = 10) => {
     .unwind("value")
     .group({ _id: "$value.brand", amount: { $sum: "$products.totalProductPrice" }, qte: { $sum: "$products.selectedQuantity" } })
     .sort({ qte: -1 })
-    .limit(nbr);
+    .limit(10);
 };
 
 const getAdminRevenueByDays = () => {
@@ -121,7 +122,7 @@ const getBestSalesByBrand = (idbrand, nbr = 10) => {
     .unwind("_id.brand")
     .project({ "_id.brand.password": 0 })
     .sort({ qte: -1 })
-    .limit(nbr);
+    .limit(10);
 };
 const getBrandRevenueByDays = idbrand => {
   return Order.aggregate()
